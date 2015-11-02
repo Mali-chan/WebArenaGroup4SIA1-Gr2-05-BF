@@ -11,6 +11,7 @@
  *
  * @author Mali
  */
+App::uses('AppController', 'Controller');
 class ArenasController extends AppController {
     
     /**

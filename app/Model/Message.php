@@ -11,6 +11,7 @@
  *
  * @author Mali
  */
+App::uses('AppModel', 'Model');
 class Message extends AppModel {
     //put your code here
 }

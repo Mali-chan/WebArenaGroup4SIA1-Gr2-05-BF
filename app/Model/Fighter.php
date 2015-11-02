@@ -11,6 +11,7 @@
  *
  * @author Mali
  */
+App::uses('AppModel', 'Model');
 class Fighter extends AppModel {
     //put your code here
 }
