@@ -34,6 +34,12 @@ class ArenasController extends AppController {
      * Fighter page
      */
     public function fighter() {
+        if ($this->request->is('post'))       
+    {            pr($this->request->data);
+                 $this->set('raw',$this->Fighter->find('all'));
+    $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);
+    $this->Fighter->doAttack(1, $this->request->data['Fighterattack']['attack']);
+    }
         
     }
 
@@ -43,12 +49,7 @@ class ArenasController extends AppController {
     public function sight()
     {
             
-        if ($this->request->is('post'))       
-    {            pr($this->request->data);
-                 $this->set('raw',$this->Fighter->find('all'));
-    $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);
-    $this->Fighter->doAttack(1, $this->request->data['Fighterattack']['attack']);
-    }
+        
         
     }
 
