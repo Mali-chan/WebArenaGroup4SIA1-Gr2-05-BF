@@ -40,7 +40,15 @@ class ArenasController extends AppController {
     /**
      * Sight page
      */
-    public function sight() {
+    public function sight()
+    {
+            
+        if ($this->request->is('post'))       
+    {            pr($this->request->data);
+                 $this->set('raw',$this->Fighter->find('all'));
+    $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);
+    $this->Fighter->doAttack(1, $this->request->data['Fighterattack']['attack']);
+    }
         
     }
 
@@ -48,7 +56,7 @@ class ArenasController extends AppController {
      * Diary page
      */
     public function diary() {
-        
+         $this->set('raw',$this->Event->find());
     }
     
 }
