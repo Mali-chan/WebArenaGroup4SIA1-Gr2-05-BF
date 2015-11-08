@@ -18,6 +18,34 @@ class Fighter extends AppModel {
     );
 
     /**
+     * Creates a new fighter for the player
+     * @param type $playerId
+     * @param type $name
+     * @todo generate coordinates randomly within arena bounds
+     * @todo check if position is not already occupied, if it is, re-generate coordinates
+     */
+    public function doCreate($playerId, $name) {
+        // Generate coordinates until position is vacant
+        $coordinate_x = 5;
+        $coordinate_y = 5;
+        
+        // Create new fighter
+        $this->create(array(
+            'name' => $name,
+            'player_id' => $playerId,
+            'coordinate_x' => $coordinate_x,
+            'coordinate_y' => $coordinate_y,
+            'level' => 0,
+            'xp' => 0,
+            'skill_sight' => 0,
+            'skill_strength' => 1,
+            'skill_health' => 3,
+            'current_health' => 3,
+            'next_action_time' => '0000-00-00 00:00:00'));
+        $this->save();
+    }
+
+    /**
      * Moves fighter to one direction
      * @param type $fighterId
      * @param type $direction
@@ -72,7 +100,7 @@ class Fighter extends AppModel {
         $defender_coordinate_x = $attacker['Fighter']['coordinate_x'];
         $defender_coordinate_y = $attacker['Fighter']['coordinate_y'];
 
-        // Look for a defender within fighter's sight
+        // Look for a defender at given direction within arena
         $defender = array();
 
         do {
@@ -95,20 +123,37 @@ class Fighter extends AppModel {
 
             $defender = $this->findByCoordinate_xAndCoordinate_y($defender_coordinate_x,
                     $defender_coordinate_y);
-        } while (empty($defender) && $this->isWithinSight($fighterId,
+        } while (empty($defender) && isWithinArena(
                 $defender_coordinate_x, $defender_coordinate_y));
 
-        // If no defender found within sight, no attack
-        if (empty($defender) || !$this->isWithinSight($fighterId,
-                        $defender_coordinate_x, $defender_coordinate_y)) {
+        // If no defender found, no attack
+        if (empty($defender) || !isWithinArena($defender_coordinate_x,
+                        $defender_coordinate_y)) {
             return false;
         }
 
         // Else, defender found, attack
-        $this->read(null, $defender['Fighter']['id']);
-        $this->set('current_health',
-                $defender['Fighter']['current_health'] - $attacker['Fighter']['skill_strength']);
+        $xpWonByAttacker = 1;
+        $defenderHealthAfterAttack = $defender['Fighter']['current_health'] - $attacker['Fighter']['skill_strength'];
+        
+        // If defender is dead, give extra xp to attacker and remove defender from the game
+        if ($defenderHealthAfterAttack <= 0) {
+            $xpWonByAttacker = $xpWonByAttacker + $defender['Fighter']['level'];
+            $this->delete($defender['Fighter']['id']);
+        }
+        // Else, defender loses health points
+        else {
+            $this->read('current_health', $defender['Fighter']['id']);
+            $this->set('current_health',
+                    $defender['Fighter']['current_health'] - $attacker['Fighter']['skill_strength']);
+            $this->save();
+        }
+        
+        // Attacker gets xp
+        $this->read('xp', $attacker['Fighter']['id']);
+        $this->set('xp', $attacker['Fighter']['xp'] + $xpWonByAttacker);
         $this->save();
+        
         return true;
     }
 
@@ -126,7 +171,7 @@ class Fighter extends AppModel {
             'skill_sight',
             'skill_strength',
             'skill_health'), $fighterId);
-        
+
         // Level up only if fighter has at least 4 xp
         if ($fighterToLevelUp['Fighter']['xp'] < 4) {
             return false;
@@ -149,10 +194,10 @@ class Fighter extends AppModel {
             default:
                 return false;
         }
-        
+
         // Edit level
         $this->set('level', $fighterToLevelUp['Fighter']['level'] + 1);
-        
+
         // Edit xp
         $this->set('xp', $fighterToLevelUp['Fighter']['xp'] - 4);
 
@@ -168,6 +213,9 @@ class Fighter extends AppModel {
      * @return boolean
      */
     public function isWithinSight($fighterId, $coordinate_x, $coordinate_y) {
+        if (!isWithinArena($coordinate_x, $coordinate_y)) {
+            return false;
+        }
         $fighter = $this->findById($fighterId);
         if ((abs($fighter['Fighter']['coordinate_x'] - $coordinate_x) > $fighter['Fighter']['skill_sight']) ||
                 (abs($fighter['Fighter']['coordinate_y'] - $coordinate_y) > $fighter['Fighter']['skill_sight'])) {

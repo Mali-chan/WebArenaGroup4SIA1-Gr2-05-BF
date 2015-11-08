@@ -37,12 +37,18 @@ class ArenasController extends AppController {
     public function fighter() {
         pr($this->request->data);
         if ($this->request->is('post')) {
-            if (isset($this->request->data['Fighterlevelup']['skill'])) {
+            // Create
+            if (isset($this->request->data['Fighter']['name'])) {
+                $this->Fighter->doCreate('545f827c-576c-4dc5-ab6d-27c33186dc3e',
+                        $this->request->data['Fighter']['name']);
+            }
+            // Level up
+            else if (isset($this->request->data['Fighterlevelup']['skill'])) {
                 $this->Fighter->doLevelUp(1,
                         $this->request->data['Fighterlevelup']['skill']);
             }
         }
-        $this->set('fighters',
+        $this->set('fighter',
                 $this->Fighter->findByPlayerId('545f827c-576c-4dc5-ab6d-27c33186dc3e'));
     }
 
@@ -53,10 +59,13 @@ class ArenasController extends AppController {
     public function sight() {
         pr($this->request->data);
         if ($this->request->is('post')) {
+            // Move
             if (isset($this->request->data['Fightermove']['direction'])) {
                 $this->Fighter->doMove(1,
                         $this->request->data['Fightermove']['direction']);
-            } else if (isset($this->request->data['Fighterattack']['direction'])) {
+            }
+            // Attack
+            else if (isset($this->request->data['Fighterattack']['direction'])) {
                 $this->Fighter->doAttack(1,
                         $this->request->data['Fighterattack']['direction']);
             }
