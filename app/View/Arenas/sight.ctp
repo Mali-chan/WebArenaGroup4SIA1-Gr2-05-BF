@@ -1,8 +1,11 @@
 <?php
+    pr($fighters);
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+    echo $this->Form->create('Fightermove');
+    echo $this->Form->input('direction', array('options' => array('north' => 'north', 'east' => 'east', 'south' => 'south', 'west' => 'west'), 'default' => 'east'));
+    echo $this->Form->end('Move');
 
+    echo $this->Form->create('Fighterattack');
+    echo $this->Form->input('direction', array('options' => array('north' => 'north', 'east' => 'east', 'south' => 'south', 'west' => 'west'), 'default' => 'east'));
+    echo $this->Form->end('Attack');
+?>

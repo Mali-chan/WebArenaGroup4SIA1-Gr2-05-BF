@@ -1,2 +1,1 @@
-<?php echo 'Welcome to he game !!! '; ?>
-
+<?php echo 'Welcome to the game !!!'; ?>

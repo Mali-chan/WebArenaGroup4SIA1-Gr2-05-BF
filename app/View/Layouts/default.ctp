@@ -1,5 +1,6 @@
 <?php
-/**<?php
+
+/**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -12,70 +13,67 @@
  * @package       app.View.Layouts
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- 
+ */
 
+/**
 $Home = __d('cake_dev', 'Home');
 $Index = __d('cake_dev', 'Index');
 $Fighter = __d('cake_dev', 'Fighter');
-$Sight = __d('cake_dev', 'Sighter');
-$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())*/
-        
+$Sight = __d('cake_dev', 'Sight');
+$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
+*/
+
 ?>
+        
 <!DOCTYPE html>
 <html>
-<head>
-   
- 
-	<?php echo $this->Html->charset(); ?>
-	<title>
-		<?php echo $Home ?>:
-		<?php echo $this->fetch('Home'); ?>
-                <
-	</title>
-	<?php
-		echo $this->Html->meta('icon');
-		echo $this->Html->css('cake.generic');
-		echo $this->fetch('meta');
-		echo $this->fetch('css');
-		echo $this->fetch('script');
-                echo $scripts_for_layout;
-	?>
-</head>
-<body>
-	<div id="container">
-		<div id="header">
-                    <nav>
+    <head>
+    <?php echo $this->Html->charset(); ?>
+        <title>
+        <?php echo $Home ?>:
+        <?php echo $this->fetch('Home'); ?>
+        </title>
+    <?php
+        echo $this->Html->meta('icon');
+        echo $this->Html->css('cake.generic');
+        echo $this->fetch('meta');
+        echo $this->fetch('css');
+        echo $this->fetch('script');
+        echo $scripts_for_layout;
+    ?>
+    </head>
+    <body>
+        <div id="container">
+            <div id="header">
+                <nav>
                     <ul>                      
-                        <h1><?php echo $this->Html->link(__('Home'), array('controller' => 'arenas', 'action' => 'index')); ?> 
-                        <?php echo $this->Html->link(__('Fighter'), array('controller' => 'arenas', 'action' => 'fighter')); ?> 
-                        <?php echo $this->Html->link(__('Sight'), array('controller' => 'arenas', 'action' => 'sight')); ?> 
-                       <?php echo $this->Html->link(__('Connexion'), array('controller' => 'arenas', 'action' => 'connexion')); ?></h1>
+                        <h1>
+                            <?php echo $this->Html->link(__('Home'), array('controller' => 'arenas', 'action' => 'index')); ?> 
+                            <?php echo $this->Html->link(__('Fighter'), array('controller' => 'arenas', 'action' => 'fighter')); ?> 
+                            <?php echo $this->Html->link(__('Sight'), array('controller' => 'arenas', 'action' => 'sight')); ?> 
+                            <?php echo $this->Html->link(__('Connexion'), array('controller' => 'arenas', 'action' => 'login')); ?>
+                        </h1>
                     </ul>
-                    </nav>
-			
-		</div>
-            
-		<div id="content">
+                </nav>
+            </div>
 
-			<?php echo $this->Session->flash(); ?>
+            <div id="content">
+            <?php echo $this->Session->flash(); ?>
+            <?php echo $this->fetch('content'); ?>
+            </div>
 
-			<?php echo $this->fetch('content'); ?>
-		</div>
-            
-            
-		<div id="footer">
-			<?php echo $this->Html->link(
-					$this->Html->image('cake.power.gif', array( 'border' => '0')),
-					'http://www.cakephp.org/',
-					array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
-				);
-			?>
-			<p>
-				<?php echo "Team Project" ; ?>
-			</p>
-		</div>
-	</div>
-	<?php echo $this->element('sql_dump'); ?>
-</body>
+            <div id="footer">
+            <?php echo $this->Html->link(
+                    $this->Html->image('cake.power.gif', array( 'border' => '0')),
+                    'http://www.cakephp.org/',
+                    array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
+                );
+            ?>
+                <p>
+                <?php echo "Team Project" ; ?>
+                </p>
+            </div>
+        </div>
+    <?php echo $this->element('sql_dump'); ?>
+    </body>
 </html>
-

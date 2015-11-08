@@ -5,66 +5,126 @@ App::uses('AppModel', 'Model');
 class Fighter extends AppModel {
 
     public $displayField = 'name';
-
+    public $recursive = 0;
     public $belongsTo = array(
-
         'Player' => array(
-
             'className' => 'Player',
-
             'foreignKey' => 'player_id',
-
         ),
+        'Guild' => array(
+            'className' => 'Guild',
+            'foreignKey' => 'guild_id',
+        ),
+    );
 
-   );
-    
-         function doMove($fighterId, $direction)
-    {
-       //récupérer la position et fixer l'id de travail
-        $datas = $this->read(null, $fighterId);
+    /**
+     * Moves fighter to one direction
+     * @param type $fighterId
+     * @param type $direction
+     * @return boolean
+     * @todo check if new position is within arena bounds
+     * @todo check if new position is not already occupied
+     */
+    public function doMove($fighterId, $direction) {
+        // Set current model to edit
+        $fighterToMove = $this->read(array(
+            'coordinate_x',
+            'coordinate_y'), $fighterId);
 
-       //falre la modif
-        if ($direction == 'north')
-            $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);
-        elseif ($direction == 'south')
-            $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] - 1);
-        elseif ($direction == 'east')
-            $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + 1);
-        elseif ($direction == 'west')
-            $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] - 1);
-        else
-            return false;
+        // Edit position
+        switch ($direction) {
+            case 'north':
+                $this->set('coordinate_y',
+                        $fighterToMove['Fighter']['coordinate_y'] + 1);
+                break;
+            case 'south':
+                $this->set('coordinate_y',
+                        $fighterToMove['Fighter']['coordinate_y'] - 1);
+                break;
+            case 'east':
+                $this->set('coordinate_x',
+                        $fighterToMove['Fighter']['coordinate_x'] + 1);
+                break;
+            case 'west':
+                $this->set('coordinate_x',
+                        $fighterToMove['Fighter']['coordinate_x'] - 1);
+                break;
+            default:
+                return false;
+        }
 
-       //sauver la modif
+        // Save modification
         $this->save();
         return true;
     }
-    
-    public function doAttack($fighterId,$attack){
- 
-       
-        // on récupère les informations sur le personnage de l'utilisateur
-        $dataAttack = $this->findById($fighterId);
-                        // récuperer les coordonnées de l'attaquant
-                $coordonne_defenseur_x = $dataAttack['Fighter']['coordinate_x'];
-                $coordonne_defenseur_y = $dataAttack['Fighter']['coordinate_y'];
- 
- 
-                if($attack == 'attack1') $this->set($coordonne_defenseur_y, $coordonne_defenseur_y + 1);
-                if($attack == 'attack2') $this->set($coordonne_defenseur_y, $coordonne_defenseur_y - 1);
-                if($attack == 'attack3') $this->set($coordonne_defenseur_x, $coordonne_defenseur_x + 1);
-                if($attack == 'attack4') $this->set($coordonne_defenseur_x, $coordonne_defenseur_x - 1);
-               
-                $dataDefenseur = $this->findByCoordinate_xAndCoordinate_y($coordonne_defenseur_x,$coordonne_defenseur_y);
-               
-                if(isset($dataDefenseur))
-                                {      
-                                        pr($dataDefenseur);
-                                                                       
-                                        $this->set('current_health', $dataDefenseur['Fighter']['current_health'] - $dataAttack['Fighter']['skill_strength']);
-                                                                        }
-                $this->save();
-                return true;
+
+    /**
+     * Attacks in one direction
+     * @param type $fighterId
+     * @param type $direction
+     * @return boolean
+     */
+    public function doAttack($fighterId, $direction) {
+        // Set current model to attacker
+        $attacker = $this->findById($fighterId);
+
+        // Initialize defenser's position with attacker's
+        $defender_coordinate_x = $attacker['Fighter']['coordinate_x'];
+        $defender_coordinate_y = $attacker['Fighter']['coordinate_y'];
+
+        // Look for a defender within fighter's sight
+        $defender = array();
+
+        do {
+            switch ($direction) {
+                case 'north':
+                    $defender_coordinate_y = $defender_coordinate_y + 1;
+                    break;
+                case 'south':
+                    $defender_coordinate_y = $defender_coordinate_y - 1;
+                    break;
+                case 'east':
+                    $defender_coordinate_x = $defender_coordinate_x + 1;
+                    break;
+                case 'south':
+                    $defender_coordinate_x = $defender_coordinate_x - 1;
+                    break;
+                default:
+                    return false;
+            }
+
+            $defender = $this->findByCoordinate_xAndCoordinate_y($defender_coordinate_x,
+                    $defender_coordinate_y);
+        } while (empty($defender) && $this->isWithinSight($fighterId,
+                $defender_coordinate_x, $defender_coordinate_y));
+
+        // If no defender found within sight, no attack
+        if (empty($defender) || !$this->isWithinSight($fighterId,
+                        $defender_coordinate_x, $defender_coordinate_y)) {
+            return false;
         }
+
+        // Else, defender found, attack
+        $this->read(null, $defender['Fighter']['id']);
+        $this->set('current_health',
+                $defender['Fighter']['current_health'] - $attacker['Fighter']['skill_strength']);
+        $this->save();
+        return true;
+    }
+
+    /**
+     * Check if coordinates are within fighter's view
+     * @param type $coordinate_x
+     * @param type $coordinate_y
+     * @return boolean
+     */
+    public function isWithinSight($fighterId, $coordinate_x, $coordinate_y) {
+        $fighter = $this->findById($fighterId);
+        if ((abs($fighter['Fighter']['coordinate_x'] - $coordinate_x) > $fighter['Fighter']['skill_sight']) ||
+                (abs($fighter['Fighter']['coordinate_y'] - $coordinate_y) > $fighter['Fighter']['skill_sight'])) {
+            return false;
+        }
+        return true;
+    }
 
 }
