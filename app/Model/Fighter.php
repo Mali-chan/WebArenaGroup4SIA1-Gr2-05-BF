@@ -113,6 +113,55 @@ class Fighter extends AppModel {
     }
 
     /**
+     * Levels skill up
+     * @param type $fighterId
+     * @param type $skill
+     * @return boolean
+     */
+    public function doLevelUp($fighterId, $skill) {
+        // Set current model to edit
+        $fighterToLevelUp = $this->read(array(
+            'level',
+            'xp',
+            'skill_sight',
+            'skill_strength',
+            'skill_health'), $fighterId);
+        
+        // Level up only if fighter has at least 4 xp
+        if ($fighterToLevelUp['Fighter']['xp'] < 4) {
+            return false;
+        }
+
+        // Edit skill
+        switch ($skill) {
+            case 'sight':
+                $this->set('skill_sight',
+                        $fighterToLevelUp['Fighter']['skill_sight'] + 1);
+                break;
+            case 'strength':
+                $this->set('skill_strength',
+                        $fighterToLevelUp['Fighter']['skill_strength'] + 1);
+                break;
+            case 'health':
+                $this->set('skill_health',
+                        $fighterToLevelUp['Fighter']['skill_health'] + 3);
+                break;
+            default:
+                return false;
+        }
+        
+        // Edit level
+        $this->set('level', $fighterToLevelUp['Fighter']['level'] + 1);
+        
+        // Edit xp
+        $this->set('xp', $fighterToLevelUp['Fighter']['xp'] - 4);
+
+        // Save modification
+        $this->save();
+        return true;
+    }
+
+    /**
      * Check if coordinates are within fighter's view
      * @param type $coordinate_x
      * @param type $coordinate_y

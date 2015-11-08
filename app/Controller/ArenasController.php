@@ -31,6 +31,13 @@ class ArenasController extends AppController {
      * @todo with sessions, parameter playerId must be the currently connected player
      */
     public function fighter() {
+        pr($this->request->data);
+        if ($this->request->is('post')) {
+            if (isset($this->request->data['Fighterlevelup']['skill'])) {
+                $this->Fighter->doLevelUp(1,
+                        $this->request->data['Fighterlevelup']['skill']);
+            }
+        }
         $this->set('fighters',
                 $this->Fighter->findByPlayerId('545f827c-576c-4dc5-ab6d-27c33186dc3e'));
     }
