@@ -50,7 +50,6 @@ class Fighter extends AppModel {
      * @param type $fighterId
      * @param type $direction
      * @return boolean
-     * @todo check if new position is within arena bounds
      * @todo check if new position is not already occupied
      */
     public function doMove($fighterId, $direction) {
@@ -59,30 +58,38 @@ class Fighter extends AppModel {
             'coordinate_x',
             'coordinate_y'), $fighterId);
 
-        // Edit position
+        // Initialize new coordinates with current position
+        $coordinate_x = $fighterToMove['Fighter']['coordinate_x'];
+        $coordinate_y = $fighterToMove['Fighter']['coordinate_y'];
+
+        // Compute new coordinates
         switch ($direction) {
             case 'north':
-                $this->set('coordinate_y',
-                        $fighterToMove['Fighter']['coordinate_y'] + 1);
+                $coordinate_y = $coordinate_y + 1;
                 break;
             case 'south':
-                $this->set('coordinate_y',
-                        $fighterToMove['Fighter']['coordinate_y'] - 1);
+                $coordinate_y = $coordinate_y - 1;
                 break;
             case 'east':
-                $this->set('coordinate_x',
-                        $fighterToMove['Fighter']['coordinate_x'] + 1);
+                $coordinate_x = $coordinate_x + 1;
                 break;
             case 'west':
-                $this->set('coordinate_x',
-                        $fighterToMove['Fighter']['coordinate_x'] - 1);
+                $coordinate_x = $coordinate_x - 1;
                 break;
             default:
                 return false;
         }
 
-        // Save modification
+        // If new position is not within arena bounds, do not move fighter
+        if (!isWithinArena($coordinate_x, $coordinate_y)) {
+            return false;
+        }
+
+        // Else, edit fighter's position
+        $this->set('coordinate_x', $coordinate_x);
+        $this->set('coordinate_y', $coordinate_y);
         $this->save();
+        
         return true;
     }
 
