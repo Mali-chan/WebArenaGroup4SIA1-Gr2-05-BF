@@ -37,7 +37,7 @@ class Fighter extends AppModel {
             'coordinate_y' => $coordinate_y,
             'level' => 0,
             'xp' => 0,
-            'skill_sight' => 0,
+            'skill_sight' => 2,
             'skill_strength' => 1,
             'skill_health' => 3,
             'current_health' => 3,
