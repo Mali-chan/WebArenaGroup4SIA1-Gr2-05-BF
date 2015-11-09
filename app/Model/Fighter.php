@@ -50,7 +50,6 @@ class Fighter extends AppModel {
      * @param type $fighterId
      * @param type $direction
      * @return boolean
-     * @todo check if new position is not already occupied
      */
     public function doMove($fighterId, $direction) {
         // Set current model to edit
@@ -59,37 +58,44 @@ class Fighter extends AppModel {
             'coordinate_y'), $fighterId);
 
         // Initialize new coordinates with current position
-        $coordinate_x = $fighterToMove['Fighter']['coordinate_x'];
-        $coordinate_y = $fighterToMove['Fighter']['coordinate_y'];
+        $new_coordinate_x = $fighterToMove['Fighter']['coordinate_x'];
+        $new_coordinate_y = $fighterToMove['Fighter']['coordinate_y'];
 
         // Compute new coordinates
         switch ($direction) {
             case 'north':
-                $coordinate_y = $coordinate_y + 1;
+                $new_coordinate_y = $new_coordinate_y + 1;
                 break;
             case 'south':
-                $coordinate_y = $coordinate_y - 1;
+                $new_coordinate_y = $new_coordinate_y - 1;
                 break;
             case 'east':
-                $coordinate_x = $coordinate_x + 1;
+                $new_coordinate_x = $new_coordinate_x + 1;
                 break;
             case 'west':
-                $coordinate_x = $coordinate_x - 1;
+                $new_coordinate_x = $new_coordinate_x - 1;
                 break;
             default:
                 return false;
         }
 
         // If new position is not within arena bounds, do not move fighter
-        if (!isWithinArena($coordinate_x, $coordinate_y)) {
+        if (!isWithinArena($new_coordinate_x, $new_coordinate_y)) {
+            return false;
+        }
+
+        // If new position is already occupied by another fighter, do not move fighter
+        $fighterAtNewPosition = $this->findByCoordinate_xAndCoordinate_y($new_coordinate_x,
+                $new_coordinate_y);
+        if (!empty($fighterAtNewPosition)) {
             return false;
         }
 
         // Else, edit fighter's position
-        $this->set('coordinate_x', $coordinate_x);
-        $this->set('coordinate_y', $coordinate_y);
+        $this->set('coordinate_x', $new_coordinate_x);
+        $this->set('coordinate_y', $new_coordinate_y);
         $this->save();
-        
+
         return true;
     }
 
