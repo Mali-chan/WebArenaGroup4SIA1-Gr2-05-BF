@@ -18,12 +18,38 @@ class Fighter extends AppModel {
     );
 
     /**
+     * Creates a new fighter for the player
+     * @param type $playerId
+     * @param type $name
+     * @todo generate coordinates randomly within arena bounds
+     * @todo check if position is not already occupied, if it is, re-generate coordinates
+     */
+    public function doCreate($playerId, $name) {
+        // Generate coordinates until position is vacant
+        $coordinate_x = 5;
+        $coordinate_y = 5;
+
+        // Create new fighter
+        $this->create(array(
+            'name' => $name,
+            'player_id' => $playerId,
+            'coordinate_x' => $coordinate_x,
+            'coordinate_y' => $coordinate_y,
+            'level' => 0,
+            'xp' => 0,
+            'skill_sight' => 2,
+            'skill_strength' => 1,
+            'skill_health' => 3,
+            'current_health' => 3,
+            'next_action_time' => '0000-00-00 00:00:00'));
+        $this->save();
+    }
+
+    /**
      * Moves fighter to one direction
      * @param type $fighterId
      * @param type $direction
      * @return boolean
-     * @todo check if new position is within arena bounds
-     * @todo check if new position is not already occupied
      */
     public function doMove($fighterId, $direction) {
         // Set current model to edit
@@ -31,30 +57,45 @@ class Fighter extends AppModel {
             'coordinate_x',
             'coordinate_y'), $fighterId);
 
-        // Edit position
+        // Initialize new coordinates with current position
+        $new_coordinate_x = $fighterToMove['Fighter']['coordinate_x'];
+        $new_coordinate_y = $fighterToMove['Fighter']['coordinate_y'];
+
+        // Compute new coordinates
         switch ($direction) {
             case 'north':
-                $this->set('coordinate_y',
-                        $fighterToMove['Fighter']['coordinate_y'] + 1);
+                $new_coordinate_y = $new_coordinate_y + 1;
                 break;
             case 'south':
-                $this->set('coordinate_y',
-                        $fighterToMove['Fighter']['coordinate_y'] - 1);
+                $new_coordinate_y = $new_coordinate_y - 1;
                 break;
             case 'east':
-                $this->set('coordinate_x',
-                        $fighterToMove['Fighter']['coordinate_x'] + 1);
+                $new_coordinate_x = $new_coordinate_x + 1;
                 break;
             case 'west':
-                $this->set('coordinate_x',
-                        $fighterToMove['Fighter']['coordinate_x'] - 1);
+                $new_coordinate_x = $new_coordinate_x - 1;
                 break;
             default:
                 return false;
         }
 
-        // Save modification
+        // If new position is not within arena bounds, do not move fighter
+        if (!isWithinArena($new_coordinate_x, $new_coordinate_y)) {
+            return false;
+        }
+
+        // If new position is already occupied by another fighter, do not move fighter
+        $fighterAtNewPosition = $this->findByCoordinate_xAndCoordinate_y($new_coordinate_x,
+                $new_coordinate_y);
+        if (!empty($fighterAtNewPosition)) {
+            return false;
+        }
+
+        // Else, edit fighter's position
+        $this->set('coordinate_x', $new_coordinate_x);
+        $this->set('coordinate_y', $new_coordinate_y);
         $this->save();
+
         return true;
     }
 
@@ -72,43 +113,54 @@ class Fighter extends AppModel {
         $defender_coordinate_x = $attacker['Fighter']['coordinate_x'];
         $defender_coordinate_y = $attacker['Fighter']['coordinate_y'];
 
-        // Look for a defender within fighter's sight
-        $defender = array();
+        // Look for a defender at given direction
+        switch ($direction) {
+            case 'north':
+                $defender_coordinate_y = $defender_coordinate_y + 1;
+                break;
+            case 'south':
+                $defender_coordinate_y = $defender_coordinate_y - 1;
+                break;
+            case 'east':
+                $defender_coordinate_x = $defender_coordinate_x + 1;
+                break;
+            case 'south':
+                $defender_coordinate_x = $defender_coordinate_x - 1;
+                break;
+            default:
+                return false;
+        }
 
-        do {
-            switch ($direction) {
-                case 'north':
-                    $defender_coordinate_y = $defender_coordinate_y + 1;
-                    break;
-                case 'south':
-                    $defender_coordinate_y = $defender_coordinate_y - 1;
-                    break;
-                case 'east':
-                    $defender_coordinate_x = $defender_coordinate_x + 1;
-                    break;
-                case 'south':
-                    $defender_coordinate_x = $defender_coordinate_x - 1;
-                    break;
-                default:
-                    return false;
-            }
+        $defender = $this->findByCoordinate_xAndCoordinate_y($defender_coordinate_x,
+                $defender_coordinate_y);
 
-            $defender = $this->findByCoordinate_xAndCoordinate_y($defender_coordinate_x,
-                    $defender_coordinate_y);
-        } while (empty($defender) && $this->isWithinSight($fighterId,
-                $defender_coordinate_x, $defender_coordinate_y));
-
-        // If no defender found within sight, no attack
-        if (empty($defender) || !$this->isWithinSight($fighterId,
-                        $defender_coordinate_x, $defender_coordinate_y)) {
+        // If no defender found, no attack
+        if (empty($defender)) {
             return false;
         }
 
         // Else, defender found, attack
-        $this->read(null, $defender['Fighter']['id']);
-        $this->set('current_health',
-                $defender['Fighter']['current_health'] - $attacker['Fighter']['skill_strength']);
+        $xpWonByAttacker = 1;
+        $defenderHealthAfterAttack = $defender['Fighter']['current_health'] - $attacker['Fighter']['skill_strength'];
+
+        // If defender is dead, give extra xp to attacker and remove defender from the game
+        if ($defenderHealthAfterAttack <= 0) {
+            $xpWonByAttacker = $xpWonByAttacker + $defender['Fighter']['level'];
+            $this->delete($defender['Fighter']['id']);
+        }
+        // Else, defender loses health points
+        else {
+            $this->read('current_health', $defender['Fighter']['id']);
+            $this->set('current_health',
+                    $defender['Fighter']['current_health'] - $attacker['Fighter']['skill_strength']);
+            $this->save();
+        }
+
+        // Attacker gets xp
+        $this->read('xp', $attacker['Fighter']['id']);
+        $this->set('xp', $attacker['Fighter']['xp'] + $xpWonByAttacker);
         $this->save();
+
         return true;
     }
 
@@ -126,7 +178,7 @@ class Fighter extends AppModel {
             'skill_sight',
             'skill_strength',
             'skill_health'), $fighterId);
-        
+
         // Level up only if fighter has at least 4 xp
         if ($fighterToLevelUp['Fighter']['xp'] < 4) {
             return false;
@@ -149,10 +201,10 @@ class Fighter extends AppModel {
             default:
                 return false;
         }
-        
+
         // Edit level
         $this->set('level', $fighterToLevelUp['Fighter']['level'] + 1);
-        
+
         // Edit xp
         $this->set('xp', $fighterToLevelUp['Fighter']['xp'] - 4);
 
@@ -168,6 +220,9 @@ class Fighter extends AppModel {
      * @return boolean
      */
     public function isWithinSight($fighterId, $coordinate_x, $coordinate_y) {
+        if (!isWithinArena($coordinate_x, $coordinate_y)) {
+            return false;
+        }
         $fighter = $this->findById($fighterId);
         if ((abs($fighter['Fighter']['coordinate_x'] - $coordinate_x) > $fighter['Fighter']['skill_sight']) ||
                 (abs($fighter['Fighter']['coordinate_y'] - $coordinate_y) > $fighter['Fighter']['skill_sight'])) {
