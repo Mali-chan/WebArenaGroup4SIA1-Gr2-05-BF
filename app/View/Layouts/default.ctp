@@ -52,6 +52,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                             <?php echo $this->Html->link(__('Fighter'), array('controller' => 'arenas', 'action' => 'fighter')); ?> 
                             <?php echo $this->Html->link(__('Sight'), array('controller' => 'arenas', 'action' => 'sight')); ?> 
                             <?php echo $this->Html->link(__('Connexion'), array('controller' => 'arenas', 'action' => 'login')); ?>
+                            <?php echo $this->Html->link(__('Diary'), array('controller' => 'arenas', 'action' => 'diary')); ?>
                         </h1>
                     </ul>
                 </nav>

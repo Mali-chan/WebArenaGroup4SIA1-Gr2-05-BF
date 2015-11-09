@@ -9,11 +9,9 @@ App::uses('AppController', 'Controller');
 
 class ArenasController extends AppController {
     
-    public $components = array('RequestHandler');
-    public $helpers = array('Text');
 
     public $uses = array(
-        'Fighter');
+        'Fighter','Event');
 
     /**
      * Index method : first page
@@ -68,20 +66,12 @@ class ArenasController extends AppController {
      * Diary page
      */
     public function diary() {
-        $this->set('raw', $this->Event->find());
+        if($this->Event->getEvent()){
+        $this->set('raw', $this->Event->getEvent());
+        }
     }
     
-    public function feed() {
-         $uses=array('Event');
-    if ($this->RequestHandler->isRss() ) {
-        $events = $this->Event->find(
-            'all',
-            array('limit' => 20, 'order' => 'Event.created DESC')
-        );
-        return $this->set(compact('events'));
-    }
 
-    }
     
  
 }

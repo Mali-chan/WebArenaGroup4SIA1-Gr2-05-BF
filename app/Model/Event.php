@@ -13,5 +13,10 @@
  */
 App::uses('AppModel', 'Model');
 class Event extends AppModel {
+    public function getEvent(){
+            
     //put your code here
+    $allData = $this->find('all');
+    return $allData;
+    }
 }
