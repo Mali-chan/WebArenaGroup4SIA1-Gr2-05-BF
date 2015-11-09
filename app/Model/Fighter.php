@@ -28,7 +28,7 @@ class Fighter extends AppModel {
         // Generate coordinates until position is vacant
         $coordinate_x = 5;
         $coordinate_y = 5;
-        
+
         // Create new fighter
         $this->create(array(
             'name' => $name,
@@ -100,42 +100,36 @@ class Fighter extends AppModel {
         $defender_coordinate_x = $attacker['Fighter']['coordinate_x'];
         $defender_coordinate_y = $attacker['Fighter']['coordinate_y'];
 
-        // Look for a defender at given direction within arena
-        $defender = array();
+        // Look for a defender at given direction
+        switch ($direction) {
+            case 'north':
+                $defender_coordinate_y = $defender_coordinate_y + 1;
+                break;
+            case 'south':
+                $defender_coordinate_y = $defender_coordinate_y - 1;
+                break;
+            case 'east':
+                $defender_coordinate_x = $defender_coordinate_x + 1;
+                break;
+            case 'south':
+                $defender_coordinate_x = $defender_coordinate_x - 1;
+                break;
+            default:
+                return false;
+        }
 
-        do {
-            switch ($direction) {
-                case 'north':
-                    $defender_coordinate_y = $defender_coordinate_y + 1;
-                    break;
-                case 'south':
-                    $defender_coordinate_y = $defender_coordinate_y - 1;
-                    break;
-                case 'east':
-                    $defender_coordinate_x = $defender_coordinate_x + 1;
-                    break;
-                case 'south':
-                    $defender_coordinate_x = $defender_coordinate_x - 1;
-                    break;
-                default:
-                    return false;
-            }
-
-            $defender = $this->findByCoordinate_xAndCoordinate_y($defender_coordinate_x,
-                    $defender_coordinate_y);
-        } while (empty($defender) && isWithinArena(
-                $defender_coordinate_x, $defender_coordinate_y));
+        $defender = $this->findByCoordinate_xAndCoordinate_y($defender_coordinate_x,
+                $defender_coordinate_y);
 
         // If no defender found, no attack
-        if (empty($defender) || !isWithinArena($defender_coordinate_x,
-                        $defender_coordinate_y)) {
+        if (empty($defender)) {
             return false;
         }
 
         // Else, defender found, attack
         $xpWonByAttacker = 1;
         $defenderHealthAfterAttack = $defender['Fighter']['current_health'] - $attacker['Fighter']['skill_strength'];
-        
+
         // If defender is dead, give extra xp to attacker and remove defender from the game
         if ($defenderHealthAfterAttack <= 0) {
             $xpWonByAttacker = $xpWonByAttacker + $defender['Fighter']['level'];
@@ -148,12 +142,12 @@ class Fighter extends AppModel {
                     $defender['Fighter']['current_health'] - $attacker['Fighter']['skill_strength']);
             $this->save();
         }
-        
+
         // Attacker gets xp
         $this->read('xp', $attacker['Fighter']['id']);
         $this->set('xp', $attacker['Fighter']['xp'] + $xpWonByAttacker);
         $this->save();
-        
+
         return true;
     }
 
