@@ -10,8 +10,9 @@ App::uses('AppController', 'Controller');
 class ArenasController extends AppController {
 
     public $uses = array(
-        'Fighter', 'Event');
-    
+        'Fighter',
+        'Event');
+
     public function beforefilter() {
         parent::beforeFilter();
 //        $this->Auth->allow(); // Allow all actions
@@ -31,11 +32,25 @@ class ArenasController extends AppController {
      */
     public function fighter() {
         pr($this->request->data);
+        
+        // Find logged player's fighter
+        $fighter = $this->Fighter->findByPlayerId('545f827c-576c-4dc5-ab6d-27c33186dc3e');
+
         if ($this->request->is('post')) {
-            // Create
+            // Create fighter
             if (isset($this->request->data['Fighter']['name'])) {
                 $this->Fighter->doCreate('545f827c-576c-4dc5-ab6d-27c33186dc3e',
                         $this->request->data['Fighter']['name']);
+            }
+            // Upload avatar
+            else if (isset($this->request->data['Fighteruploadavatar']['file'])) {
+                $filename = $this->request->data['Fighteruploadavatar']['file']['tmp_name'];
+                $destination = WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . 1;
+                if (move_uploaded_file($filename, $destination)) {
+                    $this->Flash->success('The avatar has been uploaded.');
+                } else {
+                    $this->Flash->error('The avatar could not be uploaded. Please, try again.');
+                }
             }
             // Level up
             else if (isset($this->request->data['Fighterlevelup']['skill'])) {
@@ -43,8 +58,12 @@ class ArenasController extends AppController {
                         $this->request->data['Fighterlevelup']['skill']);
             }
         }
-        $this->set('fighter',
-                $this->Fighter->findByPlayerId('545f827c-576c-4dc5-ab6d-27c33186dc3e'));
+        
+        // Set variables to use inside view
+        $this->set('fighter', $fighter);
+        if (file_exists(WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . $fighter['Fighter']['id'])) {
+            $this->set('avatar', 'avatar/' . $fighter['Fighter']['id']);
+        }
     }
 
     /**
@@ -72,8 +91,8 @@ class ArenasController extends AppController {
      * Diary page
      */
     public function diary() {
-        if($this->Event->getEvent()){
-        $this->set('raw', $this->Event->getEvent());
+        if ($this->Event->getEvent()) {
+            $this->set('raw', $this->Event->getEvent());
         }
     }
 
