@@ -55,8 +55,12 @@ class ArenasController extends AppController {
             }
             // Level up
             else if (isset($this->request->data['Fighterlevelup']['skill'])) {
-                $this->Fighter->doLevelUp(1,
-                        $this->request->data['Fighterlevelup']['skill']);
+                if ($this->Fighter->doLevelUp(1,
+                        $this->request->data['Fighterlevelup']['skill'])) {
+                    $this->Flash->success('Successful level up.');
+                } else {
+                    $this->Flash->error('Level up failed.');
+                }
             }
         }
 
@@ -76,13 +80,21 @@ class ArenasController extends AppController {
         if ($this->request->is('post')) {
             // Move
             if (isset($this->request->data['Fightermove']['direction'])) {
-                $this->Fighter->doMove(1,
-                        $this->request->data['Fightermove']['direction']);
+                if ($this->Fighter->doMove(1,
+                        $this->request->data['Fightermove']['direction'])) {
+                    $this->Flash->success('Successful move.');
+                } else {
+                    $this->Flash->error('Move failed.');
+                }
             }
             // Attack
             else if (isset($this->request->data['Fighterattack']['direction'])) {
-                $this->Fighter->doAttack(1,
-                        $this->request->data['Fighterattack']['direction']);
+                if ($this->Fighter->doAttack(1,
+                        $this->request->data['Fighterattack']['direction'])) {
+                    $this->Flash->success('Successful attack.');
+                } else {
+                    $this->Flash->error('Attack failed.');
+                }
             }
         }
         $this->set('fighters', $this->Fighter->find('all'));

@@ -141,6 +141,12 @@ class Fighter extends AppModel {
         }
 
         // Else, defender found, attack
+        // If attacker's level is greater than defender's level, attacker has more probability to attack successfully
+        if (rand(1, 20) < (10 + $defender['Fighter']['level'] - $attacker['Fighter']['level'])) {
+            return false;
+        }
+        
+        // Successful attack
         $xpWonByAttacker = 1;
         $defenderHealthAfterAttack = $defender['Fighter']['current_health'] - $attacker['Fighter']['skill_strength'];
 
