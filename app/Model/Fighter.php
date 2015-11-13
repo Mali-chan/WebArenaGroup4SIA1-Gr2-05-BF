@@ -21,13 +21,14 @@ class Fighter extends AppModel {
      * Creates a new fighter for the player
      * @param type $playerId
      * @param type $name
-     * @todo generate coordinates randomly within arena bounds
-     * @todo check if position is not already occupied, if it is, re-generate coordinates
      */
     public function doCreate($playerId, $name) {
         // Generate coordinates until position is vacant
-        $coordinate_x = 5;
-        $coordinate_y = 5;
+        do {
+            $coordinate_x = randCoordinateX();
+            $coordinate_y = randCoordinateY();
+            $fighter = $this->findByCoordinate_xAndCoordinate_y($coordinate_x, $coordinate_y);
+        } while (!empty($fighter));
 
         // Create new fighter
         $this->create(array(

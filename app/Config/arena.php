@@ -30,3 +30,19 @@ function isWithinArena($coordinate_x, $coordinate_y) {
     }
     return true;
 }
+
+/**
+ * Generate a random coordinate_x
+ * @return int
+ */
+function randCoordinateX() {
+    return rand(0, Configure::read('Arena.width') - 1);
+}
+
+/**
+ * Generate a random coordinate_y
+ * @return int
+ */
+function randCoordinateY() {
+    return rand(0, Configure::read('Arena.height') - 1);
+}

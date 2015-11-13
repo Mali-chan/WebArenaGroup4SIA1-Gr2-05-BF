@@ -32,7 +32,7 @@ class ArenasController extends AppController {
      */
     public function fighter() {
         pr($this->request->data);
-        
+
         // Find logged player's fighter
         $fighter = $this->Fighter->findByPlayerId('545f827c-576c-4dc5-ab6d-27c33186dc3e');
 
@@ -41,6 +41,7 @@ class ArenasController extends AppController {
             if (isset($this->request->data['Fighter']['name'])) {
                 $this->Fighter->doCreate('545f827c-576c-4dc5-ab6d-27c33186dc3e',
                         $this->request->data['Fighter']['name']);
+                $fighter = $this->Fighter->findByPlayerId('545f827c-576c-4dc5-ab6d-27c33186dc3e');
             }
             // Upload avatar
             else if (isset($this->request->data['Fighteruploadavatar']['file'])) {
@@ -58,10 +59,10 @@ class ArenasController extends AppController {
                         $this->request->data['Fighterlevelup']['skill']);
             }
         }
-        
+
         // Set variables to use inside view
         $this->set('fighter', $fighter);
-        if (file_exists(WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . $fighter['Fighter']['id'])) {
+        if (!empty($fighter['Fighter']['id']) && file_exists(WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . $fighter['Fighter']['id'])) {
             $this->set('avatar', 'avatar/' . $fighter['Fighter']['id']);
         }
     }
