@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application level Controller
  *
@@ -18,7 +19,6 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 App::uses('Controller', 'Controller');
 
 /**
@@ -31,4 +31,33 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+
+    public $components = array(
+        'Flash',
+        'Auth' => array(
+            'loginRedirect' => array(
+                'controller' => 'arenas',
+                'action' => 'index'
+            ),
+            'logoutRedirect' => array(
+                'controller' => 'arenas',
+                'action' => 'index'
+            ),
+            'authenticate' => array(
+                'Form' => array(
+                    'userModel' => 'Player',
+                    'fields' => array(
+                        'username' => 'email',
+                        'password' => 'password'),
+                    'passwordHasher' => 'Blowfish'
+                )
+            )
+    ));
+
+    public function beforeFilter() {
+        if (!empty($this->Auth->user())) {
+            $this->set('authUser', $this->Auth->user());
+        }
+    }
+
 }

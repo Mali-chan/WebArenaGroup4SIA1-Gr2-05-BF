@@ -48,11 +48,17 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                 <nav>
                     <ul>                      
                         <h1>
-                            <?php echo $this->Html->link(__('Home'), array('controller' => 'arenas', 'action' => 'index')); ?> 
-                            <?php echo $this->Html->link(__('Fighter'), array('controller' => 'arenas', 'action' => 'fighter')); ?> 
-                            <?php echo $this->Html->link(__('Sight'), array('controller' => 'arenas', 'action' => 'sight')); ?> 
-                            <?php echo $this->Html->link(__('Connexion'), array('controller' => 'arenas', 'action' => 'login')); ?>
-                            <?php echo $this->Html->link(__('Diary'), array('controller' => 'arenas', 'action' => 'diary')); ?>
+                            <?php echo $this->Html->link('Home', array('controller' => 'arenas', 'action' => 'index')); ?> 
+                            <?php echo $this->Html->link('Fighter', array('controller' => 'arenas', 'action' => 'fighter')); ?> 
+                            <?php echo $this->Html->link('Sight', array('controller' => 'arenas', 'action' => 'sight')); ?> 
+                            <?php echo $this->Html->link('Diary', array('controller' => 'arenas', 'action' => 'diary')); ?>
+                            <?php 
+                                if (empty($authUser)) {
+                                    echo $this->Html->link('Login', array('controller' => 'users', 'action' => 'login'));
+                                } else {
+                                    echo $this->Html->link('Logout', array('controller' => 'users', 'action' => 'logout'));
+                                }
+                            ?>
                         </h1>
                     </ul>
                 </nav>
@@ -60,6 +66,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
             <div id="content">
             <?php echo $this->Session->flash(); ?>
+            <?php echo $this->Session->flash('auth'); ?>
             <?php echo $this->fetch('content'); ?>
             </div>
 

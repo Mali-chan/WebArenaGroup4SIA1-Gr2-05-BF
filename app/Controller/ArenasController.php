@@ -8,23 +8,20 @@
 App::uses('AppController', 'Controller');
 
 class ArenasController extends AppController {
-    
 
     public $uses = array(
-        'Fighter','Event');
+        'Fighter', 'Event');
+    
+    public function beforefilter() {
+        parent::beforeFilter();
+//        $this->Auth->allow(); // Allow all actions
+        $this->Auth->allow('index');
+    }
 
     /**
      * Index method : first page
      */
     public function index() {
-        
-        
-    }
-
-    /**
-     * Login page
-     */
-    public function login() {
         
     }
 
@@ -79,9 +76,5 @@ class ArenasController extends AppController {
         $this->set('raw', $this->Event->getEvent());
         }
     }
-    
 
-    
- 
 }
-?>

@@ -12,6 +12,19 @@
  * @author Mali
  */
 App::uses('AppModel', 'Model');
+App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
+
 class Player extends AppModel {
-    //put your code here
+
+    public function beforeSave($options = array()) {
+        // Hash password
+        if (isset($this->data['Player']['password'])) {
+            $passwordHasher = new BlowfishPasswordHasher();
+            $this->data['Player']['password'] = $passwordHasher->hash(
+                    $this->data['Player']['password']
+            );
+        }
+        return true;
+    }
+
 }
