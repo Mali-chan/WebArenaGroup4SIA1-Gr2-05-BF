@@ -44,7 +44,16 @@ class Fighter extends AppModel {
             'skill_health' => 3,
             'current_health' => 3,
             'next_action_time' => '0000-00-00 00:00:00'));
-        $this->save();
+        $savedFighter = $this->save();
+
+        // Create event
+        $eventModel = ClassRegistry::init('Event');
+        $eventName = $savedFighter['Fighter']['name'] . ' enters arena';
+        $eventDate = date("Y-m-d H:i:s");
+        $eventCoordinate_x = $savedFighter['Fighter']['coordinate_x'];
+        $eventCoordinate_y = $savedFighter['Fighter']['coordinate_y'];
+        $eventModel->createEvent($eventName, $eventDate, $eventCoordinate_x,
+                $eventCoordinate_y);
     }
 
     /**
@@ -54,9 +63,9 @@ class Fighter extends AppModel {
      * @return boolean
      */
     public function doMove($fighterId, $direction) {
-         $this->create();
         // Set current model to edit
         $fighterToMove = $this->read(array(
+            'name',
             'coordinate_x',
             'coordinate_y'), $fighterId);
 
@@ -97,7 +106,16 @@ class Fighter extends AppModel {
         // Else, edit fighter's position
         $this->set('coordinate_x', $new_coordinate_x);
         $this->set('coordinate_y', $new_coordinate_y);
-        $this->save();
+        $savedFighter = $this->save();
+
+        // Create event
+        $eventModel = ClassRegistry::init('Event');
+        $eventName = $savedFighter['Fighter']['name'] . ' moves to ' . $direction;
+        $eventDate = date("Y-m-d H:i:s");
+        $eventCoordinate_x = $savedFighter['Fighter']['coordinate_x'];
+        $eventCoordinate_y = $savedFighter['Fighter']['coordinate_y'];
+        $eventModel->createEvent($eventName, $eventDate, $eventCoordinate_x,
+                $eventCoordinate_y);
 
         return true;
     }
@@ -127,7 +145,7 @@ class Fighter extends AppModel {
             case 'east':
                 $defender_coordinate_x = $defender_coordinate_x + 1;
                 break;
-            case 'south':
+            case 'west':
                 $defender_coordinate_x = $defender_coordinate_x - 1;
                 break;
             default:
@@ -145,6 +163,15 @@ class Fighter extends AppModel {
         // Else, defender found, attack
         // If attacker's level is greater than defender's level, attacker has more probability to attack successfully
         if (rand(1, 20) < (10 + $defender['Fighter']['level'] - $attacker['Fighter']['level'])) {
+            // Create event
+            $eventModel = ClassRegistry::init('Event');
+            $eventName = $attacker['Fighter']['name'] . ' attacks ' . $defender['Fighter']['name'] . ' and fails';
+            $eventDate = date("Y-m-d H:i:s");
+            $eventCoordinate_x = $defender['Fighter']['coordinate_x'];
+            $eventCoordinate_y = $defender['Fighter']['coordinate_y'];
+            $eventModel->createEvent($eventName, $eventDate, $eventCoordinate_x,
+                    $eventCoordinate_y);
+
             return false;
         }
 
@@ -155,6 +182,16 @@ class Fighter extends AppModel {
         // If defender is dead, give extra xp to attacker and remove defender from the game
         if ($defenderHealthAfterAttack <= 0) {
             $xpWonByAttacker = $xpWonByAttacker + $defender['Fighter']['level'];
+
+            // Create event
+            $eventModel = ClassRegistry::init('Event');
+            $eventName = $attacker['Fighter']['name'] . ' attacks ' . $defender['Fighter']['name'] . ' and kills him';
+            $eventDate = date("Y-m-d H:i:s");
+            $eventCoordinate_x = $defender['Fighter']['coordinate_x'];
+            $eventCoordinate_y = $defender['Fighter']['coordinate_y'];
+            $eventModel->createEvent($eventName, $eventDate, $eventCoordinate_x,
+                    $eventCoordinate_y);
+
             $this->delete($defender['Fighter']['id']);
         }
         // Else, defender loses health points
@@ -163,6 +200,15 @@ class Fighter extends AppModel {
             $this->set('current_health',
                     $defender['Fighter']['current_health'] - $attacker['Fighter']['skill_strength']);
             $this->save();
+
+            // Create event
+            $eventModel = ClassRegistry::init('Event');
+            $eventName = $attacker['Fighter']['name'] . ' attacks ' . $defender['Fighter']['name'] . ' and injures him';
+            $eventDate = date("Y-m-d H:i:s");
+            $eventCoordinate_x = $defender['Fighter']['coordinate_x'];
+            $eventCoordinate_y = $defender['Fighter']['coordinate_y'];
+            $eventModel->createEvent($eventName, $eventDate, $eventCoordinate_x,
+                    $eventCoordinate_y);
         }
 
         // Attacker gets xp
@@ -180,7 +226,6 @@ class Fighter extends AppModel {
      * @return boolean
      */
     public function doLevelUp($fighterId, $skill) {
-        $this->create();
         // Set current model to edit
         $fighterToLevelUp = $this->read(array(
             'level',
@@ -219,7 +264,17 @@ class Fighter extends AppModel {
         $this->set('xp', $fighterToLevelUp['Fighter']['xp'] - 4);
 
         // Save modification
-        $this->save();
+        $savedFighter = $this->save();
+
+        // Create event
+        $eventModel = ClassRegistry::init('Event');
+        $eventName = $savedFighter['Fighter']['name'] . ' levels up';
+        $eventDate = date("Y-m-d H:i:s");
+        $eventCoordinate_x = $savedFighter['Fighter']['coordinate_x'];
+        $eventCoordinate_y = $savedFighter['Fighter']['coordinate_y'];
+        $eventModel->createEvent($eventName, $eventDate, $eventCoordinate_x,
+                $eventCoordinate_y);
+
         return true;
     }
 
@@ -241,19 +296,5 @@ class Fighter extends AppModel {
         }
         return true;
     }
-    public function getCurrentFighter($id)
-    {
-       $data = $fighterToMove = $this->read(array(
-            'name',
-            'coordinate_x',
-            'coordinate_y'), $id);
-       
-       // If new position is not within arena bounds, do not move fighter
-       if (!isWithinArena($new_coordinate_x, $new_coordinate_y)) {
-            return false;
-        }
-       
-       return $data;   
-       
-    }
+
 }

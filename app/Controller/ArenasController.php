@@ -162,9 +162,7 @@ class ArenasController extends AppController {
      * Diary page
      */
     public function diary() {
-        if ($this->Event->getEvent()) {
-            $this->set('raw', $this->Event->getEvent());
-        }
+        $this->set('events', $this->Event->getAllEvents());
     }
 
 }
