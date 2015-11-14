@@ -108,7 +108,7 @@ class ArenasController extends AppController {
         $height = Configure::read('Arena.height');
         $width = Configure::read('Arena.width');
         for ($row = $height - 1; $row >= 0; $row--) {
-            for ($col = 0; $col < $height; $col++) {
+            for ($col = 0; $col < $width; $col++) {
                 // If position is attacker's (player's)
                 if ($row == $playerFighter['Fighter']['coordinate_y'] && $col == $playerFighter['Fighter']['coordinate_x']) {
                     // If attacker has avatar
