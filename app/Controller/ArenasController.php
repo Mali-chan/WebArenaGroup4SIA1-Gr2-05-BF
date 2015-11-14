@@ -136,7 +136,7 @@ class ArenasController extends AppController {
                                 else {
                                     $map[$row][$col] = 'map' . DS . 'defender.jpg';
                                 }
-                            // If position is vacant
+                                // If position is vacant
                             } else {
                                 if (($row + $col) % 2 == 0) {
                                     $map[$row][$col] = 'map' . DS . 'even.png';
@@ -162,7 +162,22 @@ class ArenasController extends AppController {
      * Diary page
      */
     public function diary() {
-        $this->set('events', $this->Event->getAllEvents());
+        // Get player's fighter
+        $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user()['id']);
+
+        if (!empty($playerFighter)) {
+            // Get events within 24h
+            $events = $this->Event->getEventsWithin24h();
+            // Remove events which are not in fighter's sight
+            foreach ($events as $key => $event) {
+                if (!$this->Fighter->isWithinSight($playerFighter['Fighter']['id'], $event['Event']['coordinate_x'],
+                                $event['Event']['coordinate_y'])) {
+                    unset($events[$key]);
+                }
+            }
+
+            $this->set('events', $events);
+        }
     }
 
 }

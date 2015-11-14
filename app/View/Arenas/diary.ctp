@@ -1,3 +1,4 @@
 <?php
-
-pr($events);
+if (!empty($events)) {
+    pr($events);
+}

@@ -9,10 +9,9 @@ App::uses('AppModel', 'Model');
 
 class Event extends AppModel {
 
-    public $name = "Event";
-
-    public function getAllEvents() {
-        $events = $this->find('all');
+    public function getEventsWithin24h() {
+        $start_date = date('Y-m-d H:i:s', time() - 60 * 60 * 24);
+        $events = $this->find('all', array('conditions' => array('Event.date >=' => $start_date)));
         return $events;
     }
 
