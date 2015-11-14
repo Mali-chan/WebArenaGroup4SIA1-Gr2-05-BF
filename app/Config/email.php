@@ -42,9 +42,17 @@ class EmailConfig {
 	public $default = array(
 		'transport' => 'Mail',
 		'from' => 'you@localhost',
-		//'charset' => 'utf-8',
-		//'headerCharset' => 'utf-8',
+//		'charset' => 'utf-8',
+//		'headerCharset' => 'utf-8',
 	);
+        
+        public $gmail = array(
+            'host' => 'ssl://smtp.gmail.com',
+            'port' => 465,
+            'username' => array('my@gmail.com' => 'WebArena') ,
+            'password' => 'secret',
+            'transport' => 'Smtp'
+        );
 
 	public $smtp = array(
 		'transport' => 'Smtp',
