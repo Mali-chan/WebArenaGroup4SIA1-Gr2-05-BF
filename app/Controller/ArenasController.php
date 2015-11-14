@@ -28,25 +28,24 @@ class ArenasController extends AppController {
 
     /**
      * Fighter page
-     * @todo with sessions, parameter playerId must be the currently connected player
      */
     public function fighter() {
         pr($this->request->data);
 
         // Find logged player's fighter
-        $fighter = $this->Fighter->findByPlayerId('545f827c-576c-4dc5-ab6d-27c33186dc3e');
+        $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user()['id']);
 
         if ($this->request->is('post')) {
-            // Create fighter
+            // Create
             if (isset($this->request->data['Fighter']['name'])) {
-                $this->Fighter->doCreate('545f827c-576c-4dc5-ab6d-27c33186dc3e',
+                $this->Fighter->doCreate($this->Auth->user()['id'],
                         $this->request->data['Fighter']['name']);
-                $fighter = $this->Fighter->findByPlayerId('545f827c-576c-4dc5-ab6d-27c33186dc3e');
+                $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user()['id']);
             }
             // Upload avatar
             else if (isset($this->request->data['Fighteruploadavatar']['file'])) {
                 $filename = $this->request->data['Fighteruploadavatar']['file']['tmp_name'];
-                $destination = WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . 1;
+                $destination = WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . $playerFighter['Fighter']['id'];
                 if (move_uploaded_file($filename, $destination)) {
                     $this->Flash->success('The avatar has been uploaded.');
                 } else {
@@ -55,7 +54,7 @@ class ArenasController extends AppController {
             }
             // Level up
             else if (isset($this->request->data['Fighterlevelup']['skill'])) {
-                if ($this->Fighter->doLevelUp(1,
+                if ($this->Fighter->doLevelUp($playerFighter['Fighter']['id'],
                                 $this->request->data['Fighterlevelup']['skill'])) {
                     $this->Flash->success('Successful level up.');
                 } else {
@@ -65,91 +64,98 @@ class ArenasController extends AppController {
         }
 
         // Set variables to use inside view
-        $this->set('fighter', $fighter);
-        if (!empty($fighter['Fighter']['id']) && file_exists(WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . $fighter['Fighter']['id'])) {
-            $this->set('avatar', 'avatar' . DS . $fighter['Fighter']['id']);
+        $this->set('fighter', $playerFighter);
+        if (!empty($playerFighter['Fighter']['id']) && file_exists(WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . $playerFighter['Fighter']['id'])) {
+            $this->set('avatar', 'avatar' . DS . $playerFighter['Fighter']['id']);
         }
     }
 
     /**
      * Sight page
-     * @todo pass the correct fighterId parameter
      */
     public function sight() {
         pr($this->request->data);
-        if ($this->request->is('post')) {
-            // Move
-            if (isset($this->request->data['Fightermove']['direction'])) {
-                if ($this->Fighter->doMove(1,
-                                $this->request->data['Fightermove']['direction'])) {
-                    $this->Flash->success('Successful move.');
-                } else {
-                    $this->Flash->error('Move failed.');
-                }
-            }
-            // Attack
-            else if (isset($this->request->data['Fighterattack']['direction'])) {
-                if ($this->Fighter->doAttack(1,
-                                $this->request->data['Fighterattack']['direction'])) {
-                    $this->Flash->success('Successful attack.');
-                } else {
-                    $this->Flash->error('Attack failed.');
-                }
-            }
-        }
 
-        $fighters = $this->Fighter->find('all');
-        $this->set('fighters', $fighters);
+        // Get player's fighter
+        $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user()['id']);
 
-        $playerFighter = $this->Fighter->findByPlayerId('545f827c-576c-4dc5-ab6d-27c33186dc3e');
-
-        // Map of the arena
-        $map = array();
-        $height = Configure::read('Arena.height');
-        $width = Configure::read('Arena.width');
-        for ($row = $height - 1; $row >= 0; $row--) {
-            for ($col = 0; $col < $width; $col++) {
-                // If position is attacker's (player's)
-                if ($row == $playerFighter['Fighter']['coordinate_y'] && $col == $playerFighter['Fighter']['coordinate_x']) {
-                    // If attacker has avatar
-                    if (file_exists(WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . $playerFighter['Fighter']['id'])) {
-                        $map[$row][$col] = 'avatar' . DS . $playerFighter['Fighter']['id'];
-                    }
-                    // If attacker has not avatar
-                    else {
-                        $map[$row][$col] = 'map' . DS . 'attacker.png';
-                    }
-                } else {
-                    // If position is defender's
-                    $defender = $this->Fighter->findByCoordinate_xAndCoordinate_y($col,
-                            $row);
-                    if (!empty($defender)) {
-                        // If defender has avatar
-                        if (file_exists(WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . $defender['Fighter']['id'])) {
-                            $map[$row][$col] = 'avatar' . DS . $defender['Fighter']['id'];
-                        }
-                        // If defender has not avatar
-                        else {
-                            $map[$row][$col] = 'map' . DS . 'defender.jpg';
-                        }
+        if (!empty($playerFighter)) {
+            if ($this->request->is('post')) {
+                // Move
+                if (isset($this->request->data['Fightermove']['direction'])) {
+                    if ($this->Fighter->doMove($playerFighter['Fighter']['id'],
+                                    $this->request->data['Fightermove']['direction'])) {
+                        $this->Flash->success('Successful move.');
                     } else {
-                        // If position is within sight
-                        if ($this->Fighter->isWithinSight($playerFighter['Fighter']['id'], $col, $row)) {
-                            if (($row + $col) % 2 == 0) {
-                                $map[$row][$col] = 'map' . DS . 'even.png';
+                        $this->Flash->error('Move failed.');
+                    }
+                }
+                // Attack
+                else if (isset($this->request->data['Fighterattack']['direction'])) {
+                    if ($this->Fighter->doAttack($playerFighter['Fighter']['id'],
+                                    $this->request->data['Fighterattack']['direction'])) {
+                        $this->Flash->success('Successful attack.');
+                    } else {
+                        $this->Flash->error('Attack failed.');
+                    }
+                }
+            }
+
+            // Update of player's fighter
+            $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user()['id']);
+
+            // Map of the arena
+            $map = array();
+            $height = Configure::read('Arena.height');
+            $width = Configure::read('Arena.width');
+            for ($row = $height - 1; $row >= 0; $row--) {
+                for ($col = 0; $col < $width; $col++) {
+                    // If position is within sight
+                    if ($this->Fighter->isWithinSight($playerFighter['Fighter']['id'],
+                                    $col, $row)) {
+                        // If position is attacker's (player's)
+                        if ($row == $playerFighter['Fighter']['coordinate_y'] && $col == $playerFighter['Fighter']['coordinate_x']) {
+                            // If attacker has avatar
+                            if (file_exists(WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . $playerFighter['Fighter']['id'])) {
+                                $map[$row][$col] = 'avatar' . DS . $playerFighter['Fighter']['id'];
+                            }
+                            // If attacker has not avatar
+                            else {
+                                $map[$row][$col] = 'map' . DS . 'attacker.png';
+                            }
+                        } else {
+                            // If position is defender's
+                            $defender = $this->Fighter->findByCoordinate_xAndCoordinate_y($col,
+                                    $row);
+                            if (!empty($defender)) {
+                                // If defender has avatar
+                                if (file_exists(WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . $defender['Fighter']['id'])) {
+                                    $map[$row][$col] = 'avatar' . DS . $defender['Fighter']['id'];
+                                }
+                                // If defender has not avatar
+                                else {
+                                    $map[$row][$col] = 'map' . DS . 'defender.jpg';
+                                }
+                            // If position is vacant
                             } else {
-                                $map[$row][$col] = 'map' . DS . 'odd.png';
+                                if (($row + $col) % 2 == 0) {
+                                    $map[$row][$col] = 'map' . DS . 'even.png';
+                                } else {
+                                    $map[$row][$col] = 'map' . DS . 'odd.png';
+                                }
                             }
                         }
-                        // If position is not within sight
-                        else {
-                            $map[$row][$col] = 'map' . DS . 'invisible.png';
-                        }
+                    }
+                    // If position is not within sight
+                    else {
+                        $map[$row][$col] = 'map' . DS . 'invisible.png';
                     }
                 }
             }
+            $this->set('map', $map);
+            $this->set('playerFighter', $playerFighter);
         }
-        $this->set('map', $map);
+        $this->set('fighters', $this->Fighter->find('all'));
     }
 
     /**

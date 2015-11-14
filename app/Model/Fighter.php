@@ -223,6 +223,7 @@ class Fighter extends AppModel {
 
     /**
      * Check if coordinates are within fighter's view
+     * @param type $fighterId
      * @param type $coordinate_x
      * @param type $coordinate_y
      * @return boolean
