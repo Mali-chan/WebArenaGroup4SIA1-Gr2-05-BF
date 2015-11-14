@@ -54,6 +54,7 @@ class Fighter extends AppModel {
      * @return boolean
      */
     public function doMove($fighterId, $direction) {
+         $this->create();
         // Set current model to edit
         $fighterToMove = $this->read(array(
             'coordinate_x',
@@ -179,6 +180,7 @@ class Fighter extends AppModel {
      * @return boolean
      */
     public function doLevelUp($fighterId, $skill) {
+        $this->create();
         // Set current model to edit
         $fighterToLevelUp = $this->read(array(
             'level',
@@ -239,5 +241,19 @@ class Fighter extends AppModel {
         }
         return true;
     }
-
+    public function getCurrentFighter($id)
+    {
+       $data = $fighterToMove = $this->read(array(
+            'name',
+            'coordinate_x',
+            'coordinate_y'), $id);
+       
+       // If new position is not within arena bounds, do not move fighter
+       if (!isWithinArena($new_coordinate_x, $new_coordinate_y)) {
+            return false;
+        }
+       
+       return $data;   
+       
+    }
 }
