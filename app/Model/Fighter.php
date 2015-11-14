@@ -27,7 +27,8 @@ class Fighter extends AppModel {
         do {
             $coordinate_x = randCoordinateX();
             $coordinate_y = randCoordinateY();
-            $fighter = $this->findByCoordinate_xAndCoordinate_y($coordinate_x, $coordinate_y);
+            $fighter = $this->findByCoordinate_xAndCoordinate_y($coordinate_x,
+                    $coordinate_y);
         } while (!empty($fighter));
 
         // Create new fighter
@@ -145,7 +146,7 @@ class Fighter extends AppModel {
         if (rand(1, 20) < (10 + $defender['Fighter']['level'] - $attacker['Fighter']['level'])) {
             return false;
         }
-        
+
         // Successful attack
         $xpWonByAttacker = 1;
         $defenderHealthAfterAttack = $defender['Fighter']['current_health'] - $attacker['Fighter']['skill_strength'];
@@ -231,8 +232,8 @@ class Fighter extends AppModel {
             return false;
         }
         $fighter = $this->findById($fighterId);
-        if ((abs($fighter['Fighter']['coordinate_x'] - $coordinate_x) > $fighter['Fighter']['skill_sight']) ||
-                (abs($fighter['Fighter']['coordinate_y'] - $coordinate_y) > $fighter['Fighter']['skill_sight'])) {
+        // Compute Manhattan distance
+        if (((abs($fighter['Fighter']['coordinate_x'] - $coordinate_x) + abs($fighter['Fighter']['coordinate_y'] - $coordinate_y)) > $fighter['Fighter']['skill_sight'])) {
             return false;
         }
         return true;

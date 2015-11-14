@@ -56,7 +56,7 @@ class ArenasController extends AppController {
             // Level up
             else if (isset($this->request->data['Fighterlevelup']['skill'])) {
                 if ($this->Fighter->doLevelUp(1,
-                        $this->request->data['Fighterlevelup']['skill'])) {
+                                $this->request->data['Fighterlevelup']['skill'])) {
                     $this->Flash->success('Successful level up.');
                 } else {
                     $this->Flash->error('Level up failed.');
@@ -67,7 +67,7 @@ class ArenasController extends AppController {
         // Set variables to use inside view
         $this->set('fighter', $fighter);
         if (!empty($fighter['Fighter']['id']) && file_exists(WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . $fighter['Fighter']['id'])) {
-            $this->set('avatar', 'avatar/' . $fighter['Fighter']['id']);
+            $this->set('avatar', 'avatar' . DS . $fighter['Fighter']['id']);
         }
     }
 
@@ -81,7 +81,7 @@ class ArenasController extends AppController {
             // Move
             if (isset($this->request->data['Fightermove']['direction'])) {
                 if ($this->Fighter->doMove(1,
-                        $this->request->data['Fightermove']['direction'])) {
+                                $this->request->data['Fightermove']['direction'])) {
                     $this->Flash->success('Successful move.');
                 } else {
                     $this->Flash->error('Move failed.');
@@ -90,14 +90,66 @@ class ArenasController extends AppController {
             // Attack
             else if (isset($this->request->data['Fighterattack']['direction'])) {
                 if ($this->Fighter->doAttack(1,
-                        $this->request->data['Fighterattack']['direction'])) {
+                                $this->request->data['Fighterattack']['direction'])) {
                     $this->Flash->success('Successful attack.');
                 } else {
                     $this->Flash->error('Attack failed.');
                 }
             }
         }
-        $this->set('fighters', $this->Fighter->find('all'));
+
+        $fighters = $this->Fighter->find('all');
+        $this->set('fighters', $fighters);
+
+        $playerFighter = $this->Fighter->findByPlayerId('545f827c-576c-4dc5-ab6d-27c33186dc3e');
+
+        // Map of the arena
+        $map = array();
+        $height = Configure::read('Arena.height');
+        $width = Configure::read('Arena.width');
+        for ($row = $height - 1; $row >= 0; $row--) {
+            for ($col = 0; $col < $height; $col++) {
+                // If position is attacker's (player's)
+                if ($row == $playerFighter['Fighter']['coordinate_y'] && $col == $playerFighter['Fighter']['coordinate_x']) {
+                    // If attacker has avatar
+                    if (file_exists(WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . $playerFighter['Fighter']['id'])) {
+                        $map[$row][$col] = 'avatar' . DS . $playerFighter['Fighter']['id'];
+                    }
+                    // If attacker has not avatar
+                    else {
+                        $map[$row][$col] = 'map' . DS . 'attacker.png';
+                    }
+                } else {
+                    // If position is defender's
+                    $defender = $this->Fighter->findByCoordinate_xAndCoordinate_y($col,
+                            $row);
+                    if (!empty($defender)) {
+                        // If defender has avatar
+                        if (file_exists(WWW_ROOT . DS . 'img' . DS . 'avatar' . DS . $defender['Fighter']['id'])) {
+                            $map[$row][$col] = 'avatar' . DS . $defender['Fighter']['id'];
+                        }
+                        // If defender has not avatar
+                        else {
+                            $map[$row][$col] = 'map' . DS . 'defender.jpg';
+                        }
+                    } else {
+                        // If position is within sight
+                        if ($this->Fighter->isWithinSight($playerFighter['Fighter']['id'], $col, $row)) {
+                            if (($row + $col) % 2 == 0) {
+                                $map[$row][$col] = 'map' . DS . 'even.png';
+                            } else {
+                                $map[$row][$col] = 'map' . DS . 'odd.png';
+                            }
+                        }
+                        // If position is not within sight
+                        else {
+                            $map[$row][$col] = 'map' . DS . 'invisible.png';
+                        }
+                    }
+                }
+            }
+        }
+        $this->set('map', $map);
     }
 
     /**
