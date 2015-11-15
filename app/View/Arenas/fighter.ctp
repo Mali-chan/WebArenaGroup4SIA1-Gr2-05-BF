@@ -1,10 +1,3 @@
-<table>
-    <?php
-        echo $this->Html->tableHeaders(array('Name', 'Coordinate x', 'Coordinate y', 'Level', 'Xp', 'Sight skill', 'Strength skill', 'Health skill', 'Current health'));
-        echo $this->Html->tableCells(array(array($fighter['Fighter']['name'], $fighter['Fighter']['coordinate_x'], $fighter['Fighter']['coordinate_y'], $fighter['Fighter']['level'], $fighter['Fighter']['xp'], $fighter['Fighter']['skill_sight'], $fighter['Fighter']['skill_strength'], $fighter['Fighter']['skill_health'], $fighter['Fighter']['current_health'])));
-    ?>
-</table>
-
 <?php    
     // If player's fighter is dead, suggest creating a new fighter
     if (empty($fighter)) {
@@ -14,6 +7,14 @@
     }
     // Else, if player's fighter is not dead
     else {
+?>        
+    <table>
+        <?php
+            echo $this->Html->tableHeaders(array('Name', 'Coordinate x', 'Coordinate y', 'Level', 'Xp', 'Sight skill', 'Strength skill', 'Health skill', 'Current health'));
+            echo $this->Html->tableCells(array(array($fighter['Fighter']['name'], $fighter['Fighter']['coordinate_x'], $fighter['Fighter']['coordinate_y'], $fighter['Fighter']['level'], $fighter['Fighter']['xp'], $fighter['Fighter']['skill_sight'], $fighter['Fighter']['skill_strength'], $fighter['Fighter']['skill_health'], $fighter['Fighter']['current_health'])));
+        ?>
+    </table>
+<?php 
         // Display fighter's avatar
         if (!empty($avatar)) {
             echo $this->Html->image($avatar);
