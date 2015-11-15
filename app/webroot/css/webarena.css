@@ -1,0 +1,31 @@
+#map img {
+    height: 75px;
+    width: 75px;
+}
+
+a:hover {
+    color: #ffa500;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+    color: #ffa500;
+}
+
+.btn-default:hover,
+.btn-default:focus {
+    color: #ffa500;
+}
+
+.table-hover > tbody > tr:hover {
+    background: #f5d18e;
+}
+
+#fighter_avatar {
+    max-width: 150px;
+    margin-bottom: 30px;
+}
+
+#footer {
+    margin-top: 50px;
+    text-align: center;
+}

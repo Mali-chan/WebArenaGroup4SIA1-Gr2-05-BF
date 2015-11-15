@@ -60,7 +60,6 @@ class UsersController extends AppController {
                                     'email' => $player['Player']['email'],
                                     'pass' => Security::hash($player['Player']['password'],
                                             'blowfish'))), true);
-                    pr($link);
                     if ($email->send('Click on link to recover your password: ' . $link)) {
                         $this->Flash->success('Instructions successfully sent to email.');
                     } else {

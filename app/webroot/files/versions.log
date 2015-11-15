@@ -1,0 +1,1487 @@
+commit 94f704c9827fed2130c6e1e0f81d891110cd5add
+Author: Marina <marina.hu@laposte.net>
+Date:   Sun Nov 15 23:04:48 2015 +0100
+
+    Page titles + removing debug lines + Bootstrap + versions.log
+
+ app/Controller/AppController.php                   |   10 +-
+ app/Controller/ArenasController.php                |   17 +-
+ app/Controller/PagesController.php                 |    4 +
+ app/Controller/UsersController.php                 |    1 -
+ app/View/Arenas/diary.ctp                          |    6 +-
+ app/View/Arenas/fighter.ctp                        |   52 +-
+ app/View/Arenas/index.ctp                          |    2 +-
+ app/View/Arenas/sight.ctp                          |   24 +-
+ app/View/Elements/Flash/default.ctp                |    4 +-
+ app/View/Elements/Flash/error.ctp                  |    4 +-
+ app/View/Elements/Flash/success.ctp                |    4 +-
+ app/View/Layouts/default.ctp                       |   82 +-
+ app/View/Pages/home.ctp                            |  229 +---
+ app/View/Users/login.ctp                           |   26 +-
+ app/View/Users/recover.ctp                         |   22 +-
+ app/View/Users/register.ctp                        |   15 +-
+ app/webroot/css/bootstrap-theme.min.css            |    5 +
+ app/webroot/css/bootstrap.min.css                  |    5 +
+ app/webroot/css/webarena.css                       |   31 +
+ app/webroot/files/versions.log                     | 1429 ++++++++++++++++++++
+ app/webroot/fonts/glyphicons-halflings-regular.eot |  Bin 0 -> 20127 bytes
+ app/webroot/fonts/glyphicons-halflings-regular.svg |  288 ++++
+ app/webroot/fonts/glyphicons-halflings-regular.ttf |  Bin 0 -> 45404 bytes
+ .../fonts/glyphicons-halflings-regular.woff        |  Bin 0 -> 23424 bytes
+ .../fonts/glyphicons-halflings-regular.woff2       |  Bin 0 -> 18028 bytes
+ app/webroot/js/bootstrap.min.js                    |    7 +
+ app/webroot/js/empty                               |    0
+ app/webroot/js/jquery-1.11.3.min.js                |    5 +
+ 28 files changed, 1933 insertions(+), 339 deletions(-)
+
+commit 4553b7823ab895372d95224f349d2ab5f8873658
+Author: Marina <marina.hu@laposte.net>
+Date:   Sun Nov 15 11:25:22 2015 +0100
+
+    N'afficher un Fighter que s'il existe
+
+ app/View/Arenas/fighter.ctp | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+commit c27515e28073b596c7e41074f933f15b15df39d8
+Author: Marina <marina.hu@laposte.net>
+Date:   Sun Nov 15 11:09:34 2015 +0100
+
+    Représentation des listes sous formes de tableaux
+
+ app/Model/Event.php         |  2 +-
+ app/View/Arenas/diary.ctp   | 15 ++++++++++++---
+ app/View/Arenas/fighter.ctp | 13 +++++++++----
+ app/View/Arenas/index.ctp   |  2 +-
+ app/View/Arenas/sight.ctp   |  4 +---
+ 5 files changed, 24 insertions(+), 12 deletions(-)
+
+commit fe4712c985a019b549dea330023e428a98821945
+Author: Marina <marina.hu@laposte.net>
+Date:   Sat Nov 14 22:35:13 2015 +0100
+
+    Suppression de modèles non utilisés
+
+ app/Model/Guild.php       | 17 -----------------
+ app/Model/Message.php     | 17 -----------------
+ app/Model/Surrounding.php | 17 -----------------
+ app/Model/Tool.php        | 17 -----------------
+ 4 files changed, 68 deletions(-)
+
+commit a23262d6bcffe70aef953aa78895e32ebb8d35b2
+Author: Marina <marina.hu@laposte.net>
+Date:   Sat Nov 14 22:31:53 2015 +0100
+
+    Page Event : affichages des évènements à portée de vue de moins de 24h
+
+ app/Controller/ArenasController.php | 19 +++++++++++++++++--
+ app/Model/Event.php                 |  7 +++----
+ app/View/Arenas/diary.ctp           |  5 +++--
+ 3 files changed, 23 insertions(+), 8 deletions(-)
+
+commit cc06b9466207ca04261935d2c2246ccf58e0b396
+Author: Marina <marina.hu@laposte.net>
+Date:   Sat Nov 14 20:39:22 2015 +0100
+
+    Création d'Event pour chaque action
+
+ app/Config/routes.php               |  1 -
+ app/Controller/ArenasController.php |  4 +-
+ app/Model/Event.php                 | 44 +++++++-------------
+ app/Model/Fighter.php               | 83 +++++++++++++++++++++++++++----------
+ app/View/Arenas/diary.ctp           |  9 +---
+ app/View/Layouts/rss/default.ctp    | 23 +++++-----
+ 6 files changed, 91 insertions(+), 73 deletions(-)
+
+commit ce5f849543d29a818cfa226622f568aa2357841a
+Author: Marina <marina.hu@laposte.net>
+Date:   Sat Nov 14 17:14:33 2015 +0100
+
+    Récupérer son mot de passe
+    
+    (Ne pas oublier de configurer email.php selon les besoins
+    NB : activer https://www.google.com/settings/security/lesssecureapps
+    pour avoir accès à gmail)
+
+ app/Config/email.php               | 102 +++++++++++++++++++++++++++++++++++++
+ app/Config/email.php.default       |  94 ----------------------------------
+ app/Controller/UsersController.php |  62 +++++++++++++++++++++-
+ app/View/Users/login.ctp           |   1 +
+ app/View/Users/recover.ctp         |   9 ++++
+ 5 files changed, 172 insertions(+), 96 deletions(-)
+
+commit 23590148efc852f77ed0c471e1f160ca27db3e89
+Author: MMs <mugarukamarie@gmail.com>
+Date:   Sat Nov 14 13:03:46 2015 +0100
+
+    Model Event+ Fighter
+    
+    Rajout pour créer un event , je t'envoies ce que j'ai fais dans le
+    controller par mail
+
+ app/Model/Event.php   | 21 +++++++++++++++++++++
+ app/Model/Fighter.php | 18 +++++++++++++++++-
+ 2 files changed, 38 insertions(+), 1 deletion(-)
+
+commit ba02ebe928254ee02231d2e901bedc3c35066448
+Author: Marina <marina.hu@laposte.net>
+Date:   Sat Nov 14 12:01:38 2015 +0100
+
+    Dossier avatar vide
+
+ app/webroot/img/avatar/1     | Bin 11360 -> 0 bytes
+ app/webroot/img/avatar/empty |   0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit f63388e0a1057dfb66a0c0ef1e7abd6b253d310d
+Author: Marina <marina.hu@laposte.net>
+Date:   Sat Nov 14 11:58:11 2015 +0100
+
+    Prise en compte de l'id du Player connecté (plus d'id codé en dur)
+
+ app/Controller/ArenasController.php | 152 +++++++++++++++++++-----------------
+ app/Model/Fighter.php               |   1 +
+ app/View/Arenas/sight.ctp           |  24 +++---
+ 3 files changed, 93 insertions(+), 84 deletions(-)
+
+commit e635c01427c62334217578e8a754d07b7a319b14
+Author: Marina <marina.hu@laposte.net>
+Date:   Sat Nov 14 09:58:21 2015 +0100
+
+    Correction construction de la map de l'arène
+
+ app/Controller/ArenasController.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 1cebccb458d37494682a068d363d9bf409c1fc8c
+Author: Marina <marina.hu@laposte.net>
+Date:   Sat Nov 14 09:16:33 2015 +0100
+
+    Vue de l'arène sous forme de damier
+
+ app/Controller/ArenasController.php |  62 +++++++++++++++++++++++++++++++++---
+ app/Model/Fighter.php               |   9 +++---
+ app/View/Arenas/sight.ctp           |   7 ++++
+ app/webroot/img/avatar/1            | Bin 22263 -> 11360 bytes
+ app/webroot/img/map/attacker.png    | Bin 0 -> 7795 bytes
+ app/webroot/img/map/defender.jpg    | Bin 0 -> 1583 bytes
+ app/webroot/img/map/even.png        | Bin 0 -> 171 bytes
+ app/webroot/img/map/invisible.png   | Bin 0 -> 169 bytes
+ app/webroot/img/map/odd.png         | Bin 0 -> 169 bytes
+ 9 files changed, 69 insertions(+), 9 deletions(-)
+
+commit b11553ca85f94115e9298fbef5ea7489a01dc693
+Author: Marina <marina.hu@laposte.net>
+Date:   Sat Nov 14 00:20:34 2015 +0100
+
+    Calcul de la probabilité de succès d'une attaque + messages flash
+
+ app/Controller/ArenasController.php | 24 ++++++++++++++++++------
+ app/Model/Fighter.php               |  6 ++++++
+ 2 files changed, 24 insertions(+), 6 deletions(-)
+
+commit 87254d75d251a2270debbea6d3f87980edf1eb61
+Author: Marina <marina.hu@laposte.net>
+Date:   Fri Nov 13 23:55:56 2015 +0100
+
+    À la création d'un Fighter, il apparaît à une position aléatoire libre
+
+ app/Config/arena.php                | 16 ++++++++++++++++
+ app/Controller/ArenasController.php |  7 ++++---
+ app/Model/Fighter.php               |  9 +++++----
+ 3 files changed, 25 insertions(+), 7 deletions(-)
+
+commit 795632a43a4a85693d458e39bdc6aff3ba11b153
+Author: Marina <marina.hu@laposte.net>
+Date:   Fri Nov 13 23:18:30 2015 +0100
+
+    Choisir un avatar
+
+ app/Controller/ArenasController.php |  33 ++++++++++++++++++++++++++-------
+ app/View/Arenas/fighter.ctp         |  15 +++++++++++++--
+ app/webroot/img/avatar/1            | Bin 0 -> 22263 bytes
+ 3 files changed, 39 insertions(+), 9 deletions(-)
+
+commit 2246bbd8ff20305fdb56a06fe486284ed53c4dca
+Author: Marina <marina.hu@laposte.net>
+Date:   Fri Nov 13 14:24:54 2015 +0100
+
+    Permettre l'affichage de la page création d'un compte aux utilisateurs non connectés
+
+ app/Controller/UsersController.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit bd15310a21e24718c359119c1c79a8eb124fc4b0
+Author: Marina <marina.hu@laposte.net>
+Date:   Fri Nov 13 01:05:48 2015 +0100
+
+    Inscription + connexion + déconnexion
+
+ app/Controller/AppController.php    | 31 +++++++++++++++++++++++++-
+ app/Controller/ArenasController.php | 21 ++++++------------
+ app/Controller/UsersController.php  | 44 +++++++++++++++++++++++++++++++++++++
+ app/Model/Player.php                | 15 ++++++++++++-
+ app/View/Arenas/login.ctp           |  8 -------
+ app/View/Elements/Flash/default.ctp |  1 +
+ app/View/Elements/Flash/error.ctp   |  1 +
+ app/View/Elements/Flash/success.ctp |  1 +
+ app/View/Elements/empty             |  0
+ app/View/Layouts/default.ctp        | 17 +++++++++-----
+ app/View/Users/login.ctp            |  8 +++++++
+ app/View/Users/register.ctp         |  8 +++++++
+ 12 files changed, 126 insertions(+), 29 deletions(-)
+
+commit 02b4bfddbbce4804bace20c66f9efa26eb90e42a
+Merge: 07bab0c 04611f0
+Author: MMs <mugarukamarie@gmail.com>
+Date:   Mon Nov 9 17:51:51 2015 +0100
+
+    Merge branch 'master' of https://github.com/Mali-chan/WebArenaGroup4SIA1-Gr2-05-BF
+
+commit 07bab0c703835d72f19a9a0ca08dcdfe109a4a05
+Author: MMs <mugarukamarie@gmail.com>
+Date:   Mon Nov 9 17:51:41 2015 +0100
+
+    Event
+    
+    Fonction Event Termine
+
+ app/Controller/ArenasController.php | 18 ++++------------
+ app/Model/Event.php                 |  5 +++++
+ app/View/Arenas/diary.ctp           |  2 ++
+ app/View/Arenas/rss/feed.ctp        | 42 -------------------------------------
+ app/View/Layouts/default.ctp        |  1 +
+ 5 files changed, 12 insertions(+), 56 deletions(-)
+
+commit 04611f0466eff6eb70791e535448a7f87d0ed550
+Author: Marina <marina.hu@laposte.net>
+Date:   Mon Nov 9 16:00:33 2015 +0100
+
+    La vision d'un Fighter est initialisée à 2
+
+ app/Model/Fighter.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit d6450218b06d7a83a46dc16596c958e10c3a8132
+Author: Marina <marina.hu@laposte.net>
+Date:   Mon Nov 9 15:54:26 2015 +0100
+
+    Fighter move: check if new position is not already occupied by another fighter
+
+ app/Model/Fighter.php | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
+
+commit f738f6edb9defb65a678bade286b6902cebf4550
+Author: Marina <marina.hu@laposte.net>
+Date:   Mon Nov 9 15:47:09 2015 +0100
+
+    Fighter move: check if new position is within arena bounds
+
+ app/Model/Fighter.php | 29 ++++++++++++++++++-----------
+ 1 file changed, 18 insertions(+), 11 deletions(-)
+
+commit f430b4f89cf03d9caaf6ee5fb3a33298985d7821
+Author: Marina <marina.hu@laposte.net>
+Date:   Mon Nov 9 15:28:26 2015 +0100
+
+    Un Fighter n'attaque qu'à portée (positions adjacentes à la sienne)
+
+ app/Model/Fighter.php | 56 +++++++++++++++++++++++----------------------------
+ 1 file changed, 25 insertions(+), 31 deletions(-)
+
+commit fef5cc3fedad98b084ba9d05f144cfb2f8cb6914
+Author: MMs <mugarukamarie@gmail.com>
+Date:   Mon Nov 9 12:13:34 2015 +0100
+
+    Revert "Revert "Page event""
+    
+    This reverts commit ffb63b7df57e1fcc012cb049401e048875aae374.
+
+ app/Config/routes.php               |  1 +
+ app/Controller/ArenasController.php | 18 ++++++++++++++++
+ app/View/Arenas/rss/feed.ctp        | 42 +++++++++++++++++++++++++++++++++++++
+ app/View/Layouts/rss/default.ctp    | 23 ++++++++++----------
+ 4 files changed, 72 insertions(+), 12 deletions(-)
+
+commit ffb63b7df57e1fcc012cb049401e048875aae374
+Author: MMs <mugarukamarie@gmail.com>
+Date:   Mon Nov 9 12:13:16 2015 +0100
+
+    Revert "Page event"
+    
+    This reverts commit 5da1a8d2995b6e27a53ceaeb66117118143c43ff.
+
+ app/Config/routes.php               |  1 -
+ app/Controller/ArenasController.php | 18 ----------------
+ app/View/Arenas/rss/feed.ctp        | 42 -------------------------------------
+ app/View/Layouts/rss/default.ctp    | 23 ++++++++++----------
+ 4 files changed, 12 insertions(+), 72 deletions(-)
+
+commit ede46bcb1c9c0f6a74796f90415f7bb9cfcc9d80
+Author: Marina <marina.hu@laposte.net>
+Date:   Sun Nov 8 17:21:11 2015 +0100
+
+    Définition limites de l'arène, corrections attaque, gestion mort d'un Fighter, gestion recréation d'un Fighter
+    
+    - Ajout fichier de configuration arena.php (constantes pour définir les
+    limites de l’arène)
+    - La page fighter() permet soit d’augmenter d’un niveau, soit de
+    recréer un Fighter en cas de mort
+    - Un Fighter attaque dans une direction au sein de l’arène, pas
+    nécessairement au sein de son champ de vision
+    - Si une attaque réussit, l’attaquant gagne plus ou moins de xp selon
+    la mort ou non du défenseur
+    - En cas de mort, le Fighter est retiré du jeu
+
+ app/Config/arena.php                | 32 +++++++++++++++++
+ app/Config/bootstrap.php            |  5 +++
+ app/Controller/ArenasController.php | 15 ++++++--
+ app/Model/Fighter.php               | 70 +++++++++++++++++++++++++++++++------
+ app/View/Arenas/fighter.ctp         | 17 ++++++---
+ 5 files changed, 121 insertions(+), 18 deletions(-)
+
+commit 5da1a8d2995b6e27a53ceaeb66117118143c43ff
+Author: MMs <mugarukamarie@gmail.com>
+Date:   Sun Nov 8 16:03:30 2015 +0100
+
+    Page event
+    
+    Premier essaie , erreurs à corriger
+
+ app/Config/routes.php               |  1 +
+ app/Controller/ArenasController.php | 18 ++++++++++++++++
+ app/View/Arenas/rss/feed.ctp        | 42 +++++++++++++++++++++++++++++++++++++
+ app/View/Layouts/rss/default.ctp    | 23 ++++++++++----------
+ 4 files changed, 72 insertions(+), 12 deletions(-)
+
+commit b1f21b9c4b6e6dd92c76bdec387b4b0913f73876
+Author: Marina <marina.hu@laposte.net>
+Date:   Sun Nov 8 12:35:35 2015 +0100
+
+    Passer un Fighter de niveau
+
+ app/Controller/ArenasController.php |  7 ++++++
+ app/Model/Fighter.php               | 49 +++++++++++++++++++++++++++++++++++++
+ app/View/Arenas/fighter.ctp         |  4 +++
+ 3 files changed, 60 insertions(+)
+
+commit e8b6bf34e05f8ca931bc26a61cdc83f2fb85efd2
+Author: Marina <marina.hu@laposte.net>
+Date:   Sun Nov 8 02:42:26 2015 +0100
+
+    Correction du commit (c268dbd2a69bb415581ef18804021df73de1ac85) de mmug
+    
+    - Correction default.ctp : affichage de la page de connexion
+    - Vue fighter.ctp déplacée dans sight.ctp
+    - Correction page sight() : effectuer seulement l’action demandée
+    (doMove() ou doAttack())
+    - Correction actions doMove() et doAttack() de Fighter
+
+ app/Controller/ArenasController.php |  47 +++++------
+ app/Model/Fighter.php               | 158 +++++++++++++++++++++++++-----------
+ app/View/Arenas/fighter.ctp         |  10 +--
+ app/View/Arenas/index.ctp           |   3 +-
+ app/View/Arenas/sight.ctp           |  13 +--
+ app/View/Layouts/default.ctp        | 110 ++++++++++++-------------
+ 6 files changed, 197 insertions(+), 144 deletions(-)
+
+commit b55dc7920a0ca4410c3033ad9529924c7cd95b75
+Author: Marina <marina.hu@laposte.net>
+Date:   Sat Nov 7 23:18:43 2015 +0100
+
+    - database.php.default à ne pas commit (ce n'est pas trop grave car nos bases sont locales, mais imaginez si tout le monde pouvait avoir les accès à une base serveur...), par ailleurs le fichier est à renommer database.php localement
+    - doMove() et doAttack() sont bien effectués dans sight() et non dans fighter()
+
+ app/Config/database.php.default     | 92 -------------------------------------
+ app/Controller/ArenasController.php | 13 +++---
+ 2 files changed, 6 insertions(+), 99 deletions(-)
+
+commit 3edbd42d43519c572c9374f51d73ac3f28b74516
+Author: MMs <mugarukamarie@gmail.com>
+Date:   Sat Nov 7 15:28:43 2015 +0100
+
+    v.2
+    
+    arenacontroller-> modif plus rajout de database qui manquait
+
+ app/Config/database.php.default     | 92 +++++++++++++++++++++++++++++++++++++
+ app/Controller/ArenasController.php | 13 +++---
+ 2 files changed, 99 insertions(+), 6 deletions(-)
+
+commit c268dbd2a69bb415581ef18804021df73de1ac85
+Author: MMs <mugarukamarie@gmail.com>
+Date:   Sat Nov 7 15:09:34 2015 +0100
+
+    V.1
+    
+    Modif -> default pour le menu
+    ->model fighter pour doattack/domove
+    ->index pour l'affichage
+
+ app/Controller/ArenasController.php | 12 +++++-
+ app/Model/Fighter.php               | 79 +++++++++++++++++++++++++++++++------
+ app/View/Arenas/fighter.ctp         | 15 ++++---
+ app/View/Arenas/index.ctp           |  8 +---
+ app/View/Layouts/default.ctp        | 42 ++++++++++++++------
+ 5 files changed, 116 insertions(+), 40 deletions(-)
+
+commit c0c4af340217b8e62a91abdc036c9ebe02602140
+Author: Marina <marina.hu@laposte.net>
+Date:   Mon Nov 2 17:12:21 2015 +0100
+
+    Chargement des classes
+
+ app/Controller/ArenasController.php | 1 +
+ app/Model/Event.php                 | 1 +
+ app/Model/Fighter.php               | 1 +
+ app/Model/Guild.php                 | 1 +
+ app/Model/Message.php               | 1 +
+ app/Model/Player.php                | 1 +
+ app/Model/Surrounding.php           | 1 +
+ app/Model/Tool.php                  | 1 +
+ 8 files changed, 8 insertions(+)
+
+commit 7428561a5a1687acd7bd65f5ced1074c393d6748
+Author: Marina <marina.hu@laposte.net>
+Date:   Mon Nov 2 17:01:17 2015 +0100
+
+    Classes principales vierges
+
+ app/Controller/ArenasController.php | 53 +++++++++++++++++++++++++++++++++++++
+ app/Model/Event.php                 | 16 +++++++++++
+ app/Model/Fighter.php               | 16 +++++++++++
+ app/Model/Guild.php                 | 16 +++++++++++
+ app/Model/Message.php               | 16 +++++++++++
+ app/Model/Player.php                | 16 +++++++++++
+ app/Model/Surrounding.php           | 16 +++++++++++
+ app/Model/Tool.php                  | 16 +++++++++++
+ app/View/Arenas/diary.ctp           |  8 ++++++
+ app/View/Arenas/fighter.ctp         |  8 ++++++
+ app/View/Arenas/index.ctp           |  8 ++++++
+ app/View/Arenas/login.ctp           |  8 ++++++
+ app/View/Arenas/sight.ctp           |  8 ++++++
+ 13 files changed, 205 insertions(+)
+
+commit cf385675f61a585e31956ca76844c8bce59466e9
+Author: Marina <marina.hu@laposte.net>
+Date:   Mon Nov 2 09:26:21 2015 +0100
+
+    Projet CakePHP vierge
+
+ .editorconfig                                      |    17 +
+ .gitattributes                                     |    38 +
+ .gitignore                                         |    27 +
+ .htaccess                                          |     5 +
+ .travis.yml                                        |   129 +
+ CONTRIBUTING.md                                    |    77 +
+ README.md                                          |    50 +
+ app/.htaccess                                      |     5 +
+ app/Config/Schema/db_acl.php                       |   102 +
+ app/Config/Schema/db_acl.sql                       |    52 +
+ app/Config/Schema/i18n.php                         |    61 +
+ app/Config/Schema/i18n.sql                         |    27 +
+ app/Config/Schema/sessions.php                     |    57 +
+ app/Config/Schema/sessions.sql                     |    17 +
+ app/Config/acl.ini.php                             |    65 +
+ app/Config/acl.php                                 |   145 +
+ app/Config/bootstrap.php                           |   114 +
+ app/Config/core.php                                |   386 +
+ app/Config/email.php.default                       |    94 +
+ app/Config/routes.php                              |    43 +
+ app/Console/Command/AppShell.php                   |    30 +
+ app/Console/Command/Task/empty                     |     0
+ app/Console/Templates/empty                        |     0
+ app/Console/cake                                   |    41 +
+ app/Console/cake.bat                               |    31 +
+ app/Console/cake.php                               |    47 +
+ app/Controller/AppController.php                   |    34 +
+ app/Controller/Component/empty                     |     0
+ app/Controller/PagesController.php                 |    76 +
+ app/Lib/empty                                      |     0
+ app/Locale/eng/LC_MESSAGES/empty                   |     0
+ app/Model/AppModel.php                             |    33 +
+ app/Model/Behavior/empty                           |     0
+ app/Model/Datasource/empty                         |     0
+ app/Plugin/empty                                   |     0
+ app/Test/Case/Controller/Component/empty           |     0
+ app/Test/Case/Model/Behavior/empty                 |     0
+ app/Test/Case/View/Helper/empty                    |     0
+ app/Test/Fixture/empty                             |     0
+ app/Vendor/empty                                   |     0
+ app/View/Elements/empty                            |     0
+ app/View/Emails/html/default.ctp                   |    23 +
+ app/View/Emails/text/default.ctp                   |    17 +
+ app/View/Errors/error400.ctp                       |    29 +
+ app/View/Errors/error500.ctp                       |    26 +
+ app/View/Helper/AppHelper.php                      |    33 +
+ app/View/Layouts/Emails/html/default.ctp           |    27 +
+ app/View/Layouts/Emails/text/default.ctp           |    19 +
+ app/View/Layouts/ajax.ctp                          |    17 +
+ app/View/Layouts/default.ctp                       |    63 +
+ app/View/Layouts/error.ctp                         |    59 +
+ app/View/Layouts/flash.ctp                         |    39 +
+ app/View/Layouts/js/default.ctp                    |     2 +
+ app/View/Layouts/rss/default.ctp                   |    14 +
+ app/View/Layouts/xml/default.ctp                   |     1 +
+ app/View/Pages/home.ctp                            |   228 +
+ app/View/Scaffolds/empty                           |     0
+ app/index.php                                      |    17 +
+ app/webroot/.htaccess                              |     6 +
+ app/webroot/css/cake.generic.css                   |   744 ++
+ app/webroot/favicon.ico                            |   Bin 0 -> 372 bytes
+ app/webroot/files/empty                            |     0
+ app/webroot/img/cake.icon.png                      |   Bin 0 -> 943 bytes
+ app/webroot/img/cake.power.gif                     |   Bin 0 -> 201 bytes
+ app/webroot/img/test-error-icon.png                |   Bin 0 -> 3358 bytes
+ app/webroot/img/test-fail-icon.png                 |   Bin 0 -> 496 bytes
+ app/webroot/img/test-pass-icon.png                 |   Bin 0 -> 783 bytes
+ app/webroot/img/test-skip-icon.png                 |   Bin 0 -> 1207 bytes
+ app/webroot/index.php                              |   118 +
+ app/webroot/js/empty                               |     0
+ app/webroot/test.php                               |   108 +
+ build.properties                                   |    12 +
+ build.xml                                          |   261 +
+ composer.json                                      |    31 +
+ index.php                                          |    41 +
+ lib/Cake/Cache/Cache.php                           |   581 ++
+ lib/Cake/Cache/CacheEngine.php                     |   180 +
+ lib/Cake/Cache/Engine/ApcEngine.php                |   191 +
+ lib/Cake/Cache/Engine/FileEngine.php               |   432 +
+ lib/Cake/Cache/Engine/MemcacheEngine.php           |   292 +
+ lib/Cake/Cache/Engine/MemcachedEngine.php          |   338 +
+ lib/Cake/Cache/Engine/RedisEngine.php              |   230 +
+ lib/Cake/Cache/Engine/WincacheEngine.php           |   191 +
+ lib/Cake/Cache/Engine/XcacheEngine.php             |   210 +
+ lib/Cake/Config/cacert.pem                         |  3920 +++++++
+ lib/Cake/Config/config.php                         |    21 +
+ lib/Cake/Config/routes.php                         |    82 +
+ lib/Cake/Config/unicode/casefolding/0080_00ff.php  |    72 +
+ lib/Cake/Config/unicode/casefolding/0100_017f.php  |   105 +
+ lib/Cake/Config/unicode/casefolding/0180_024F.php  |   147 +
+ lib/Cake/Config/unicode/casefolding/0250_02af.php  |    40 +
+ lib/Cake/Config/unicode/casefolding/0370_03ff.php  |   101 +
+ lib/Cake/Config/unicode/casefolding/0400_04ff.php  |   163 +
+ lib/Cake/Config/unicode/casefolding/0500_052f.php  |    49 +
+ lib/Cake/Config/unicode/casefolding/0530_058f.php  |    77 +
+ lib/Cake/Config/unicode/casefolding/1e00_1eff.php  |   167 +
+ lib/Cake/Config/unicode/casefolding/1f00_1fff.php  |   215 +
+ lib/Cake/Config/unicode/casefolding/2100_214f.php  |    43 +
+ lib/Cake/Config/unicode/casefolding/2150_218f.php  |    56 +
+ lib/Cake/Config/unicode/casefolding/2460_24ff.php  |    65 +
+ lib/Cake/Config/unicode/casefolding/2c00_2c5f.php  |    86 +
+ lib/Cake/Config/unicode/casefolding/2c60_2c7f.php  |    47 +
+ lib/Cake/Config/unicode/casefolding/2c80_2cff.php  |    89 +
+ lib/Cake/Config/unicode/casefolding/ff00_ffef.php  |    65 +
+ lib/Cake/Configure/ConfigReaderInterface.php       |    43 +
+ lib/Cake/Configure/IniReader.php                   |   230 +
+ lib/Cake/Configure/PhpReader.php                   |   118 +
+ lib/Cake/Console/Command/AclShell.php              |   619 ++
+ lib/Cake/Console/Command/ApiShell.php              |   242 +
+ lib/Cake/Console/Command/AppShell.php              |    30 +
+ lib/Cake/Console/Command/BakeShell.php             |   255 +
+ lib/Cake/Console/Command/CommandListShell.php      |   143 +
+ lib/Cake/Console/Command/CompletionShell.php       |   155 +
+ lib/Cake/Console/Command/ConsoleShell.php          |   514 +
+ lib/Cake/Console/Command/I18nShell.php             |   122 +
+ lib/Cake/Console/Command/SchemaShell.php           |   570 +
+ lib/Cake/Console/Command/ServerShell.php           |   167 +
+ lib/Cake/Console/Command/Task/BakeTask.php         |    92 +
+ lib/Cake/Console/Command/Task/CommandTask.php      |   183 +
+ lib/Cake/Console/Command/Task/ControllerTask.php   |   508 +
+ lib/Cake/Console/Command/Task/DbConfigTask.php     |   385 +
+ lib/Cake/Console/Command/Task/ExtractTask.php      |   836 ++
+ lib/Cake/Console/Command/Task/FixtureTask.php      |   458 +
+ lib/Cake/Console/Command/Task/ModelTask.php        |  1053 ++
+ lib/Cake/Console/Command/Task/PluginTask.php       |   236 +
+ lib/Cake/Console/Command/Task/ProjectTask.php      |   453 +
+ lib/Cake/Console/Command/Task/TemplateTask.php     |   217 +
+ lib/Cake/Console/Command/Task/TestTask.php         |   582 ++
+ lib/Cake/Console/Command/Task/ViewTask.php         |   477 +
+ lib/Cake/Console/Command/TestShell.php             |   432 +
+ lib/Cake/Console/Command/TestsuiteShell.php        |   100 +
+ lib/Cake/Console/Command/UpgradeShell.php          |   888 ++
+ lib/Cake/Console/ConsoleErrorHandler.php           |   105 +
+ lib/Cake/Console/ConsoleInput.php                  |    82 +
+ lib/Cake/Console/ConsoleInputArgument.php          |   170 +
+ lib/Cake/Console/ConsoleInputOption.php            |   220 +
+ lib/Cake/Console/ConsoleInputSubcommand.php        |   120 +
+ lib/Cake/Console/ConsoleOptionParser.php           |   663 ++
+ lib/Cake/Console/ConsoleOutput.php                 |   306 +
+ lib/Cake/Console/HelpFormatter.php                 |   201 +
+ lib/Cake/Console/Shell.php                         |   950 ++
+ lib/Cake/Console/ShellDispatcher.php               |   378 +
+ lib/Cake/Console/TaskCollection.php                |   100 +
+ .../default/actions/controller_actions.ctp         |   152 +
+ .../Templates/default/classes/controller.ctp       |    82 +
+ .../Console/Templates/default/classes/fixture.ctp  |    64 +
+ .../Console/Templates/default/classes/model.ctp    |   189 +
+ .../Console/Templates/default/classes/test.ctp     |    81 +
+ lib/Cake/Console/Templates/default/views/form.ctp  |    63 +
+ lib/Cake/Console/Templates/default/views/index.ctp |    93 +
+ lib/Cake/Console/Templates/default/views/view.ctp  |   134 +
+ lib/Cake/Console/Templates/skel/.htaccess          |     5 +
+ .../Templates/skel/Config/Schema/db_acl.php        |    82 +
+ .../Templates/skel/Config/Schema/db_acl.sql        |    52 +
+ .../Console/Templates/skel/Config/Schema/i18n.php  |    62 +
+ .../Console/Templates/skel/Config/Schema/i18n.sql  |    27 +
+ .../Templates/skel/Config/Schema/sessions.php      |    57 +
+ .../Templates/skel/Config/Schema/sessions.sql      |    17 +
+ lib/Cake/Console/Templates/skel/Config/acl.ini.php |    57 +
+ lib/Cake/Console/Templates/skel/Config/acl.php     |   124 +
+ .../Console/Templates/skel/Config/bootstrap.php    |    98 +
+ lib/Cake/Console/Templates/skel/Config/core.php    |   367 +
+ .../Templates/skel/Config/database.php.default     |    77 +
+ .../Templates/skel/Config/email.php.default        |    83 +
+ lib/Cake/Console/Templates/skel/Config/routes.php  |    35 +
+ .../Templates/skel/Console/Command/AppShell.php    |    21 +
+ .../Templates/skel/Console/Command/Task/empty      |     0
+ .../Console/Templates/skel/Console/Templates/empty |     0
+ lib/Cake/Console/Templates/skel/Console/cake       |    41 +
+ lib/Cake/Console/Templates/skel/Console/cake.bat   |    30 +
+ lib/Cake/Console/Templates/skel/Console/cake.php   |    48 +
+ .../Templates/skel/Controller/AppController.php    |    25 +
+ .../Templates/skel/Controller/Component/empty      |     0
+ .../Templates/skel/Controller/PagesController.php  |    67 +
+ lib/Cake/Console/Templates/skel/Lib/empty          |     0
+ .../Templates/skel/Locale/eng/LC_MESSAGES/empty    |     0
+ lib/Cake/Console/Templates/skel/Model/AppModel.php |    24 +
+ .../Console/Templates/skel/Model/Behavior/empty    |     0
+ .../Console/Templates/skel/Model/Datasource/empty  |     0
+ lib/Cake/Console/Templates/skel/Plugin/empty       |     0
+ .../Templates/skel/Test/Case/AllTestsTest.php      |    31 +
+ .../skel/Test/Case/Controller/Component/empty      |     0
+ .../Templates/skel/Test/Case/Model/Behavior/empty  |     0
+ .../Templates/skel/Test/Case/View/Helper/empty     |     0
+ lib/Cake/Console/Templates/skel/Test/Fixture/empty |     0
+ lib/Cake/Console/Templates/skel/Vendor/empty       |     0
+ .../Templates/skel/View/Elements/Flash/default.ctp |     1 +
+ .../Templates/skel/View/Emails/html/default.ctp    |    23 +
+ .../Templates/skel/View/Emails/text/default.ctp    |    17 +
+ .../Templates/skel/View/Errors/error400.ctp        |    20 +
+ .../Templates/skel/View/Errors/error500.ctp        |    17 +
+ .../Templates/skel/View/Helper/AppHelper.php       |    24 +
+ .../skel/View/Layouts/Emails/html/default.ctp      |    18 +
+ .../skel/View/Layouts/Emails/text/default.ctp      |    19 +
+ .../Console/Templates/skel/View/Layouts/ajax.ctp   |     8 +
+ .../Templates/skel/View/Layouts/default.ctp        |    50 +
+ .../Console/Templates/skel/View/Layouts/error.ctp  |    50 +
+ .../Console/Templates/skel/View/Layouts/flash.ctp  |    26 +
+ .../Templates/skel/View/Layouts/js/default.ctp     |     2 +
+ .../Templates/skel/View/Layouts/rss/default.ctp    |    13 +
+ .../Templates/skel/View/Layouts/xml/default.ctp    |     1 +
+ .../Console/Templates/skel/View/Pages/home.ctp     |   231 +
+ .../Console/Templates/skel/View/Scaffolds/empty    |     0
+ lib/Cake/Console/Templates/skel/index.php          |     8 +
+ lib/Cake/Console/Templates/skel/webroot/.htaccess  |     6 +
+ .../Templates/skel/webroot/css/cake.generic.css    |   742 ++
+ .../Console/Templates/skel/webroot/favicon.ico     |   Bin 0 -> 372 bytes
+ .../Console/Templates/skel/webroot/files/empty     |     0
+ .../Templates/skel/webroot/img/cake.icon.png       |   Bin 0 -> 943 bytes
+ .../Templates/skel/webroot/img/cake.power.gif      |   Bin 0 -> 201 bytes
+ .../Templates/skel/webroot/img/test-error-icon.png |   Bin 0 -> 3358 bytes
+ .../Templates/skel/webroot/img/test-fail-icon.png  |   Bin 0 -> 496 bytes
+ .../Templates/skel/webroot/img/test-pass-icon.png  |   Bin 0 -> 783 bytes
+ .../Templates/skel/webroot/img/test-skip-icon.png  |   Bin 0 -> 1207 bytes
+ lib/Cake/Console/Templates/skel/webroot/index.php  |   109 +
+ lib/Cake/Console/Templates/skel/webroot/js/empty   |     0
+ lib/Cake/Console/Templates/skel/webroot/test.php   |    99 +
+ lib/Cake/Console/cake                              |    41 +
+ lib/Cake/Console/cake.bat                          |    31 +
+ lib/Cake/Console/cake.php                          |    54 +
+ lib/Cake/Controller/CakeErrorController.php        |    62 +
+ lib/Cake/Controller/Component.php                  |   164 +
+ lib/Cake/Controller/Component/Acl/AclInterface.php |    73 +
+ lib/Cake/Controller/Component/Acl/DbAcl.php        |   163 +
+ lib/Cake/Controller/Component/Acl/IniAcl.php       |   174 +
+ lib/Cake/Controller/Component/Acl/PhpAcl.php       |   563 +
+ lib/Cake/Controller/Component/AclComponent.php     |   180 +
+ .../Component/Auth/AbstractPasswordHasher.php      |    72 +
+ .../Controller/Component/Auth/ActionsAuthorize.php |    41 +
+ .../Controller/Component/Auth/BaseAuthenticate.php |   237 +
+ .../Controller/Component/Auth/BaseAuthorize.php    |   168 +
+ .../Component/Auth/BasicAuthenticate.php           |   117 +
+ .../Component/Auth/BlowfishAuthenticate.php        |    53 +
+ .../Component/Auth/BlowfishPasswordHasher.php      |    48 +
+ .../Component/Auth/ControllerAuthorize.php         |    66 +
+ .../Controller/Component/Auth/CrudAuthorize.php    |   101 +
+ .../Component/Auth/DigestAuthenticate.php          |   226 +
+ .../Controller/Component/Auth/FormAuthenticate.php |    82 +
+ .../Component/Auth/SimplePasswordHasher.php        |    55 +
+ lib/Cake/Controller/Component/AuthComponent.php    |   848 ++
+ lib/Cake/Controller/Component/CookieComponent.php  |   571 +
+ lib/Cake/Controller/Component/EmailComponent.php   |   465 +
+ lib/Cake/Controller/Component/FlashComponent.php   |   120 +
+ .../Controller/Component/PaginatorComponent.php    |   429 +
+ .../Component/RequestHandlerComponent.php          |   783 ++
+ .../Controller/Component/SecurityComponent.php     |   625 ++
+ lib/Cake/Controller/Component/SessionComponent.php |   202 +
+ lib/Cake/Controller/ComponentCollection.php        |   140 +
+ lib/Cake/Controller/Controller.php                 |  1250 +++
+ lib/Cake/Controller/Scaffold.php                   |   448 +
+ lib/Cake/Core/App.php                              |   936 ++
+ lib/Cake/Core/CakePlugin.php                       |   285 +
+ lib/Cake/Core/Configure.php                        |   474 +
+ lib/Cake/Core/Object.php                           |   213 +
+ lib/Cake/Error/ErrorHandler.php                    |   321 +
+ lib/Cake/Error/ExceptionRenderer.php               |   330 +
+ lib/Cake/Error/exceptions.php                      |   628 ++
+ lib/Cake/Event/CakeEvent.php                       |   130 +
+ lib/Cake/Event/CakeEventListener.php               |    46 +
+ lib/Cake/Event/CakeEventManager.php                |   299 +
+ lib/Cake/I18n/I18n.php                             |   745 ++
+ lib/Cake/I18n/L10n.php                             |   491 +
+ lib/Cake/I18n/Multibyte.php                        |   879 ++
+ lib/Cake/LICENSE.txt                               |    28 +
+ lib/Cake/Log/CakeLog.php                           |   545 +
+ lib/Cake/Log/CakeLogInterface.php                  |    36 +
+ lib/Cake/Log/Engine/BaseLog.php                    |    67 +
+ lib/Cake/Log/Engine/ConsoleLog.php                 |    87 +
+ lib/Cake/Log/Engine/FileLog.php                    |   220 +
+ lib/Cake/Log/Engine/SyslogLog.php                  |   158 +
+ lib/Cake/Log/LogEngineCollection.php               |    74 +
+ lib/Cake/Model/AclNode.php                         |   184 +
+ lib/Cake/Model/Aco.php                             |    39 +
+ lib/Cake/Model/AcoAction.php                       |    39 +
+ lib/Cake/Model/Aro.php                             |    39 +
+ lib/Cake/Model/Behavior/AclBehavior.php            |   144 +
+ lib/Cake/Model/Behavior/ContainableBehavior.php    |   431 +
+ lib/Cake/Model/Behavior/TranslateBehavior.php      |   712 ++
+ lib/Cake/Model/Behavior/TreeBehavior.php           |  1252 +++
+ lib/Cake/Model/BehaviorCollection.php              |   296 +
+ lib/Cake/Model/CakeSchema.php                      |   736 ++
+ lib/Cake/Model/ConnectionManager.php               |   270 +
+ lib/Cake/Model/Datasource/CakeSession.php          |   774 ++
+ lib/Cake/Model/Datasource/DataSource.php           |   437 +
+ lib/Cake/Model/Datasource/Database/Mysql.php       |   837 ++
+ lib/Cake/Model/Datasource/Database/Postgres.php    |   975 ++
+ lib/Cake/Model/Datasource/Database/Sqlite.php      |   591 ++
+ lib/Cake/Model/Datasource/Database/Sqlserver.php   |   817 ++
+ lib/Cake/Model/Datasource/DboSource.php            |  3585 +++++++
+ lib/Cake/Model/Datasource/Session/CacheSession.php |    89 +
+ .../Session/CakeSessionHandlerInterface.php        |    73 +
+ .../Model/Datasource/Session/DatabaseSession.php   |   158 +
+ lib/Cake/Model/I18nModel.php                       |    47 +
+ lib/Cake/Model/Model.php                           |  3887 +++++++
+ lib/Cake/Model/ModelBehavior.php                   |   240 +
+ lib/Cake/Model/ModelValidator.php                  |   602 ++
+ lib/Cake/Model/Permission.php                      |   257 +
+ lib/Cake/Model/Validator/CakeValidationRule.php    |   350 +
+ lib/Cake/Model/Validator/CakeValidationSet.php     |   370 +
+ lib/Cake/Network/CakeRequest.php                   |  1125 ++
+ lib/Cake/Network/CakeResponse.php                  |  1519 +++
+ lib/Cake/Network/CakeSocket.php                    |   410 +
+ lib/Cake/Network/Email/AbstractTransport.php       |    75 +
+ lib/Cake/Network/Email/CakeEmail.php               |  1750 ++++
+ lib/Cake/Network/Email/DebugTransport.php          |    40 +
+ lib/Cake/Network/Email/MailTransport.php           |    82 +
+ lib/Cake/Network/Email/SmtpTransport.php           |   377 +
+ lib/Cake/Network/Http/BasicAuthentication.php      |    65 +
+ lib/Cake/Network/Http/DigestAuthentication.php     |   104 +
+ lib/Cake/Network/Http/HttpResponse.php             |    35 +
+ lib/Cake/Network/Http/HttpSocket.php               |  1081 ++
+ lib/Cake/Network/Http/HttpSocketResponse.php       |   447 +
+ lib/Cake/Routing/Dispatcher.php                    |   273 +
+ lib/Cake/Routing/DispatcherFilter.php              |   100 +
+ lib/Cake/Routing/Filter/AssetDispatcher.php        |   168 +
+ lib/Cake/Routing/Filter/CacheDispatcher.php        |    73 +
+ lib/Cake/Routing/Route/CakeRoute.php               |   566 +
+ lib/Cake/Routing/Route/PluginShortRoute.php        |    59 +
+ lib/Cake/Routing/Route/RedirectRoute.php           |   125 +
+ lib/Cake/Routing/Router.php                        |  1272 +++
+ lib/Cake/Test/Case/AllBehaviorsTest.php            |    42 +
+ lib/Cake/Test/Case/AllCacheTest.php                |    39 +
+ lib/Cake/Test/Case/AllComponentsTest.php           |    41 +
+ lib/Cake/Test/Case/AllConfigureTest.php            |    39 +
+ lib/Cake/Test/Case/AllConsoleTest.php              |    43 +
+ lib/Cake/Test/Case/AllControllerTest.php           |    43 +
+ lib/Cake/Test/Case/AllCoreTest.php                 |    39 +
+ lib/Cake/Test/Case/AllDatabaseTest.php             |    55 +
+ lib/Cake/Test/Case/AllDbRelatedTest.php            |    49 +
+ lib/Cake/Test/Case/AllErrorTest.php                |    41 +
+ lib/Cake/Test/Case/AllEventTest.php                |    38 +
+ lib/Cake/Test/Case/AllHelpersTest.php              |    41 +
+ lib/Cake/Test/Case/AllI18nTest.php                 |    39 +
+ lib/Cake/Test/Case/AllLogTest.php                  |    39 +
+ lib/Cake/Test/Case/AllNetworkTest.php              |    41 +
+ lib/Cake/Test/Case/AllRoutingTest.php              |    43 +
+ lib/Cake/Test/Case/AllTestSuiteTest.php            |    39 +
+ lib/Cake/Test/Case/AllTestsTest.php                |    60 +
+ lib/Cake/Test/Case/AllUtilityTest.php              |    38 +
+ lib/Cake/Test/Case/AllViewTest.php                 |    39 +
+ lib/Cake/Test/Case/BasicsTest.php                  |  1197 +++
+ lib/Cake/Test/Case/Cache/CacheTest.php             |   522 +
+ lib/Cake/Test/Case/Cache/Engine/ApcEngineTest.php  |   276 +
+ lib/Cake/Test/Case/Cache/Engine/FileEngineTest.php |   553 +
+ .../Test/Case/Cache/Engine/MemcacheEngineTest.php  |   493 +
+ .../Test/Case/Cache/Engine/MemcachedEngineTest.php |   800 ++
+ .../Test/Case/Cache/Engine/RedisEngineTest.php     |   384 +
+ .../Test/Case/Cache/Engine/WincacheEngineTest.php  |   262 +
+ .../Test/Case/Cache/Engine/XcacheEngineTest.php    |   271 +
+ lib/Cake/Test/Case/Configure/IniReaderTest.php     |   304 +
+ lib/Cake/Test/Case/Configure/PhpReaderTest.php     |   193 +
+ lib/Cake/Test/Case/Console/AllConsoleLibsTest.php  |    47 +
+ lib/Cake/Test/Case/Console/AllConsoleTest.php      |    43 +
+ lib/Cake/Test/Case/Console/AllShellsTest.php       |    41 +
+ lib/Cake/Test/Case/Console/AllTasksTest.php        |    40 +
+ .../Test/Case/Console/Command/AclShellTest.php     |   311 +
+ .../Test/Case/Console/Command/ApiShellTest.php     |    95 +
+ .../Test/Case/Console/Command/BakeShellTest.php    |   119 +
+ .../Case/Console/Command/CommandListShellTest.php  |   133 +
+ .../Case/Console/Command/CompletionShellTest.php   |   261 +
+ .../Test/Case/Console/Command/SchemaShellTest.php  |   698 ++
+ .../Case/Console/Command/Task/CommandTaskTest.php  |   242 +
+ .../Console/Command/Task/ControllerTaskTest.php    |   618 ++
+ .../Case/Console/Command/Task/DbConfigTaskTest.php |   132 +
+ .../Case/Console/Command/Task/ExtractTaskTest.php  |   513 +
+ .../Case/Console/Command/Task/FixtureTaskTest.php  |   455 +
+ .../Case/Console/Command/Task/ModelTaskTest.php    |  1327 +++
+ .../Case/Console/Command/Task/PluginTaskTest.php   |   221 +
+ .../Case/Console/Command/Task/ProjectTaskTest.php  |   385 +
+ .../Case/Console/Command/Task/TemplateTaskTest.php |   164 +
+ .../Case/Console/Command/Task/TestTaskTest.php     |   755 ++
+ .../Case/Console/Command/Task/ViewTaskTest.php     |   700 ++
+ .../Test/Case/Console/Command/TestShellTest.php    |   344 +
+ .../Test/Case/Console/ConsoleErrorHandlerTest.php  |   177 +
+ .../Test/Case/Console/ConsoleOptionParserTest.php  |   646 ++
+ lib/Cake/Test/Case/Console/ConsoleOutputTest.php   |   257 +
+ lib/Cake/Test/Case/Console/HelpFormatterTest.php   |   509 +
+ lib/Cake/Test/Case/Console/ShellDispatcherTest.php |   574 +
+ lib/Cake/Test/Case/Console/ShellTest.php           |   978 ++
+ lib/Cake/Test/Case/Console/TaskCollectionTest.php  |   155 +
+ .../Case/Controller/Component/Acl/DbAclTest.php    |   543 +
+ .../Case/Controller/Component/Acl/IniAclTest.php   |    68 +
+ .../Case/Controller/Component/Acl/PhpAclTest.php   |   374 +
+ .../Case/Controller/Component/AclComponentTest.php |    91 +
+ .../Component/Auth/ActionsAuthorizeTest.php        |   197 +
+ .../Component/Auth/BasicAuthenticateTest.php       |   329 +
+ .../Component/Auth/BlowfishAuthenticateTest.php    |   208 +
+ .../Component/Auth/ControllerAuthorizeTest.php     |    91 +
+ .../Component/Auth/CrudAuthorizeTest.php           |   189 +
+ .../Component/Auth/DigestAuthenticateTest.php      |   310 +
+ .../Component/Auth/FormAuthenticateTest.php        |   345 +
+ .../Controller/Component/AuthComponentTest.php     |  1771 ++++
+ .../Controller/Component/CookieComponentTest.php   |   777 ++
+ .../Controller/Component/EmailComponentTest.php    |   907 ++
+ .../Controller/Component/FlashComponentTest.php    |   171 +
+ .../Component/PaginatorComponentTest.php           |  1421 +++
+ .../Component/RequestHandlerComponentTest.php      |   984 ++
+ .../Controller/Component/SecurityComponentTest.php |  1460 +++
+ .../Controller/Component/SessionComponentTest.php  |   291 +
+ .../Case/Controller/ComponentCollectionTest.php    |   178 +
+ lib/Cake/Test/Case/Controller/ComponentTest.php    |   289 +
+ .../Case/Controller/ControllerMergeVarsTest.php    |   250 +
+ lib/Cake/Test/Case/Controller/ControllerTest.php   |  1488 +++
+ .../Test/Case/Controller/PagesControllerTest.php   |    78 +
+ lib/Cake/Test/Case/Controller/ScaffoldTest.php     |   416 +
+ lib/Cake/Test/Case/Core/AppTest.php                |   832 ++
+ lib/Cake/Test/Case/Core/CakePluginTest.php         |   299 +
+ lib/Cake/Test/Case/Core/ConfigureTest.php          |   518 +
+ lib/Cake/Test/Case/Core/ObjectTest.php             |   679 ++
+ lib/Cake/Test/Case/Error/ErrorHandlerTest.php      |   389 +
+ lib/Cake/Test/Case/Error/ExceptionRendererTest.php |   880 ++
+ lib/Cake/Test/Case/Event/CakeEventManagerTest.php  |   535 +
+ lib/Cake/Test/Case/Event/CakeEventTest.php         |    90 +
+ lib/Cake/Test/Case/I18n/I18nTest.php               |  2162 ++++
+ lib/Cake/Test/Case/I18n/L10nTest.php               |   992 ++
+ lib/Cake/Test/Case/I18n/MultibyteTest.php          |  9228 +++++++++++++++++
+ lib/Cake/Test/Case/Log/CakeLogTest.php             |   747 ++
+ lib/Cake/Test/Case/Log/Engine/ConsoleLogTest.php   |   154 +
+ lib/Cake/Test/Case/Log/Engine/FileLogTest.php      |   194 +
+ lib/Cake/Test/Case/Log/Engine/SyslogLogTest.php    |    92 +
+ lib/Cake/Test/Case/Log/LogEngineCollectionTest.php |    89 +
+ lib/Cake/Test/Case/Model/AclNodeTest.php           |   356 +
+ .../Test/Case/Model/Behavior/AclBehaviorTest.php   |   484 +
+ .../Model/Behavior/ContainableBehaviorTest.php     |  3767 +++++++
+ .../Case/Model/Behavior/TranslateBehaviorTest.php  |  1423 +++
+ .../Case/Model/Behavior/TreeBehaviorAfterTest.php  |    75 +
+ .../Case/Model/Behavior/TreeBehaviorNumberTest.php |  1611 +++
+ .../Case/Model/Behavior/TreeBehaviorScopedTest.php |   591 ++
+ .../Test/Case/Model/Behavior/TreeBehaviorTest.php  |    42 +
+ .../Case/Model/Behavior/TreeBehaviorUuidTest.php   |   298 +
+ .../Test/Case/Model/BehaviorCollectionTest.php     |  1268 +++
+ lib/Cake/Test/Case/Model/CakeSchemaTest.php        |  1013 ++
+ lib/Cake/Test/Case/Model/ConnectionManagerTest.php |   345 +
+ .../Test/Case/Model/Datasource/CakeSessionTest.php |   834 ++
+ .../Test/Case/Model/Datasource/DataSourceTest.php  |   249 +
+ .../Case/Model/Datasource/Database/MysqlTest.php   |  4095 ++++++++
+ .../Model/Datasource/Database/PostgresTest.php     |  1207 +++
+ .../Case/Model/Datasource/Database/SqliteTest.php  |   588 ++
+ .../Model/Datasource/Database/SqlserverTest.php    |   710 ++
+ .../Test/Case/Model/Datasource/DboSourceTest.php   |  1746 ++++
+ .../Model/Datasource/Session/CacheSessionTest.php  |   121 +
+ .../Datasource/Session/DatabaseSessionTest.php     |   246 +
+ .../Test/Case/Model/ModelCrossSchemaHabtmTest.php  |   236 +
+ lib/Cake/Test/Case/Model/ModelDeleteTest.php       |   948 ++
+ lib/Cake/Test/Case/Model/ModelIntegrationTest.php  |  2514 +++++
+ lib/Cake/Test/Case/Model/ModelReadTest.php         |  8323 +++++++++++++++
+ lib/Cake/Test/Case/Model/ModelTest.php             |    46 +
+ lib/Cake/Test/Case/Model/ModelTestBase.php         |    96 +
+ lib/Cake/Test/Case/Model/ModelValidationTest.php   |  2535 +++++
+ lib/Cake/Test/Case/Model/ModelWriteTest.php        |  8201 +++++++++++++++
+ .../Model/Validator/CakeValidationRuleTest.php     |   198 +
+ .../Case/Model/Validator/CakeValidationSetTest.php |   337 +
+ lib/Cake/Test/Case/Model/models.php                |  5128 +++++++++
+ lib/Cake/Test/Case/Network/CakeRequestTest.php     |  2483 +++++
+ lib/Cake/Test/Case/Network/CakeResponseTest.php    |  1894 ++++
+ lib/Cake/Test/Case/Network/CakeSocketTest.php      |   373 +
+ lib/Cake/Test/Case/Network/Email/CakeEmailTest.php |  2503 +++++
+ .../Test/Case/Network/Email/DebugTransportTest.php |    77 +
+ .../Test/Case/Network/Email/MailTransportTest.php  |    91 +
+ .../Test/Case/Network/Email/SmtpTransportTest.php  |   540 +
+ .../Case/Network/Http/BasicAuthenticationTest.php  |    63 +
+ .../Case/Network/Http/DigestAuthenticationTest.php |   201 +
+ .../Test/Case/Network/Http/HttpResponseTest.php    |   582 ++
+ lib/Cake/Test/Case/Network/Http/HttpSocketTest.php |  1928 ++++
+ lib/Cake/Test/Case/Routing/DispatcherTest.php      |  1752 ++++
+ .../Case/Routing/Filter/AssetDispatcherTest.php    |   266 +
+ lib/Cake/Test/Case/Routing/Route/CakeRouteTest.php |  1010 ++
+ .../Case/Routing/Route/PluginShortRouteTest.php    |    71 +
+ .../Test/Case/Routing/Route/RedirectRouteTest.php  |   122 +
+ lib/Cake/Test/Case/Routing/RouterTest.php          |  2862 +++++
+ lib/Cake/Test/Case/TestSuite/CakeTestCaseTest.php  |   514 +
+ .../Test/Case/TestSuite/CakeTestFixtureTest.php    |   574 +
+ lib/Cake/Test/Case/TestSuite/CakeTestSuiteTest.php |   105 +
+ .../Test/Case/TestSuite/ControllerTestCaseTest.php |   628 ++
+ .../TestSuite/Fixture/CakeFixtureManagerTest.php   |   103 +
+ .../Test/Case/TestSuite/HtmlCoverageReportTest.php |   237 +
+ lib/Cake/Test/Case/Utility/CakeNumberTest.php      |   789 ++
+ lib/Cake/Test/Case/Utility/CakeTextTest.php        |   874 ++
+ lib/Cake/Test/Case/Utility/CakeTimeTest.php        |  1199 +++
+ lib/Cake/Test/Case/Utility/ClassRegistryTest.php   |   316 +
+ lib/Cake/Test/Case/Utility/DebuggerTest.php        |   633 ++
+ lib/Cake/Test/Case/Utility/FileTest.php            |   646 ++
+ lib/Cake/Test/Case/Utility/FolderTest.php          |  1230 +++
+ lib/Cake/Test/Case/Utility/HashTest.php            |  2648 +++++
+ lib/Cake/Test/Case/Utility/InflectorTest.php       |   646 ++
+ .../Test/Case/Utility/ObjectCollectionTest.php     |   615 ++
+ lib/Cake/Test/Case/Utility/SanitizeTest.php        |   448 +
+ lib/Cake/Test/Case/Utility/SecurityTest.php        |   427 +
+ lib/Cake/Test/Case/Utility/SetTest.php             |  3566 +++++++
+ lib/Cake/Test/Case/Utility/ValidationTest.php      |  2477 +++++
+ lib/Cake/Test/Case/Utility/XmlTest.php             |  1239 +++
+ lib/Cake/Test/Case/View/Helper/CacheHelperTest.php |   649 ++
+ lib/Cake/Test/Case/View/Helper/FlashHelperTest.php |   157 +
+ lib/Cake/Test/Case/View/Helper/FormHelperTest.php  | 10368 +++++++++++++++++++
+ lib/Cake/Test/Case/View/Helper/HtmlHelperTest.php  |  2315 +++++
+ .../Case/View/Helper/JqueryEngineHelperTest.php    |   400 +
+ lib/Cake/Test/Case/View/Helper/JsHelperTest.php    |   948 ++
+ .../Case/View/Helper/MootoolsEngineHelperTest.php  |   382 +
+ .../Test/Case/View/Helper/NumberHelperTest.php     |   110 +
+ .../Test/Case/View/Helper/PaginatorHelperTest.php  |  2930 ++++++
+ .../Case/View/Helper/PrototypeEngineHelperTest.php |   390 +
+ lib/Cake/Test/Case/View/Helper/RssHelperTest.php   |   757 ++
+ .../Test/Case/View/Helper/SessionHelperTest.php    |   191 +
+ lib/Cake/Test/Case/View/Helper/TextHelperTest.php  |   553 +
+ lib/Cake/Test/Case/View/Helper/TimeHelperTest.php  |   184 +
+ lib/Cake/Test/Case/View/HelperCollectionTest.php   |   192 +
+ lib/Cake/Test/Case/View/HelperTest.php             |  1003 ++
+ lib/Cake/Test/Case/View/JsonViewTest.php           |   405 +
+ lib/Cake/Test/Case/View/MediaViewTest.php          |   137 +
+ lib/Cake/Test/Case/View/ScaffoldViewTest.php       |   463 +
+ lib/Cake/Test/Case/View/ThemeViewTest.php          |   264 +
+ lib/Cake/Test/Case/View/ViewTest.php               |  1788 ++++
+ lib/Cake/Test/Case/View/XmlViewTest.php            |   266 +
+ lib/Cake/Test/Fixture/AccountFixture.php           |    49 +
+ lib/Cake/Test/Fixture/AcoActionFixture.php         |    47 +
+ lib/Cake/Test/Fixture/AcoFixture.php               |    60 +
+ lib/Cake/Test/Fixture/AcoTwoFixture.php            |    58 +
+ lib/Cake/Test/Fixture/AdFixture.php                |    55 +
+ lib/Cake/Test/Fixture/AdvertisementFixture.php     |    47 +
+ lib/Cake/Test/Fixture/AfterTreeFixture.php         |    54 +
+ lib/Cake/Test/Fixture/AnotherArticleFixture.php    |    48 +
+ lib/Cake/Test/Fixture/AppleFixture.php             |    56 +
+ lib/Cake/Test/Fixture/ArmorFixture.php             |    58 +
+ lib/Cake/Test/Fixture/ArmorsPlayerFixture.php      |    59 +
+ lib/Cake/Test/Fixture/AroFixture.php               |    52 +
+ lib/Cake/Test/Fixture/AroTwoFixture.php            |    58 +
+ lib/Cake/Test/Fixture/ArosAcoFixture.php           |    47 +
+ lib/Cake/Test/Fixture/ArosAcoTwoFixture.php        |    68 +
+ lib/Cake/Test/Fixture/ArticleFeaturedFixture.php   |    51 +
+ .../Test/Fixture/ArticleFeaturedsTagsFixture.php   |    36 +
+ lib/Cake/Test/Fixture/ArticleFixture.php           |    52 +
+ lib/Cake/Test/Fixture/ArticlesTagFixture.php       |    48 +
+ lib/Cake/Test/Fixture/AssertTagsTestCase.php       |   119 +
+ lib/Cake/Test/Fixture/AttachmentFixture.php        |    47 +
+ .../Test/Fixture/AuthUserCustomFieldFixture.php    |    52 +
+ lib/Cake/Test/Fixture/AuthUserFixture.php          |    52 +
+ lib/Cake/Test/Fixture/AuthorFixture.php            |    50 +
+ lib/Cake/Test/Fixture/BakeArticleFixture.php       |    47 +
+ .../Test/Fixture/BakeArticlesBakeTagFixture.php    |    43 +
+ lib/Cake/Test/Fixture/BakeCommentFixture.php       |    47 +
+ lib/Cake/Test/Fixture/BakeTagFixture.php           |    44 +
+ lib/Cake/Test/Fixture/BasketFixture.php            |    48 +
+ lib/Cake/Test/Fixture/BidFixture.php               |    49 +
+ lib/Cake/Test/Fixture/BiddingFixture.php           |    48 +
+ lib/Cake/Test/Fixture/BiddingMessageFixture.php    |    47 +
+ lib/Cake/Test/Fixture/BinaryTestFixture.php        |    42 +
+ lib/Cake/Test/Fixture/BookFixture.php              |    48 +
+ lib/Cake/Test/Fixture/CacheTestModelFixture.php    |    36 +
+ lib/Cake/Test/Fixture/CakeSessionFixture.php       |    41 +
+ lib/Cake/Test/Fixture/CallbackFixture.php          |    49 +
+ lib/Cake/Test/Fixture/CampaignFixture.php          |    47 +
+ lib/Cake/Test/Fixture/CategoryFixture.php          |    54 +
+ lib/Cake/Test/Fixture/CategoryThreadFixture.php    |    53 +
+ lib/Cake/Test/Fixture/CdFixture.php                |    46 +
+ lib/Cake/Test/Fixture/CommentFixture.php           |    54 +
+ lib/Cake/Test/Fixture/ContentAccountFixture.php    |    52 +
+ lib/Cake/Test/Fixture/ContentFixture.php           |    49 +
+ lib/Cake/Test/Fixture/CounterCachePostFixture.php  |    38 +
+ ...ounterCachePostNonstandardPrimaryKeyFixture.php |    37 +
+ lib/Cake/Test/Fixture/CounterCacheUserFixture.php  |    37 +
+ ...ounterCacheUserNonstandardPrimaryKeyFixture.php |    36 +
+ lib/Cake/Test/Fixture/DataTestFixture.php          |    52 +
+ lib/Cake/Test/Fixture/DatatypeFixture.php          |    47 +
+ lib/Cake/Test/Fixture/DependencyFixture.php        |    46 +
+ lib/Cake/Test/Fixture/DeviceFixture.php            |    48 +
+ .../Test/Fixture/DeviceTypeCategoryFixture.php     |    44 +
+ lib/Cake/Test/Fixture/DeviceTypeFixture.php        |    51 +
+ lib/Cake/Test/Fixture/DocumentDirectoryFixture.php |    44 +
+ lib/Cake/Test/Fixture/DocumentFixture.php          |    45 +
+ lib/Cake/Test/Fixture/DomainFixture.php            |    52 +
+ lib/Cake/Test/Fixture/DomainsSiteFixture.php       |    53 +
+ .../Test/Fixture/ExteriorTypeCategoryFixture.php   |    45 +
+ lib/Cake/Test/Fixture/FeatureSetFixture.php        |    44 +
+ lib/Cake/Test/Fixture/FeaturedFixture.php          |    50 +
+ lib/Cake/Test/Fixture/FilmFileFixture.php          |    45 +
+ lib/Cake/Test/Fixture/FixturizedTestCase.php       |    60 +
+ lib/Cake/Test/Fixture/FlagTreeFixture.php          |    43 +
+ lib/Cake/Test/Fixture/FruitFixture.php             |    50 +
+ lib/Cake/Test/Fixture/FruitsUuidTagFixture.php     |    47 +
+ lib/Cake/Test/Fixture/GroupUpdateAllFixture.php    |    57 +
+ lib/Cake/Test/Fixture/GuildFixture.php             |    46 +
+ lib/Cake/Test/Fixture/GuildsPlayerFixture.php      |    49 +
+ lib/Cake/Test/Fixture/HomeFixture.php              |    49 +
+ lib/Cake/Test/Fixture/ImageFixture.php             |    48 +
+ lib/Cake/Test/Fixture/InnoFixture.php              |    49 +
+ lib/Cake/Test/Fixture/ItemFixture.php              |    51 +
+ lib/Cake/Test/Fixture/ItemsPortfolioFixture.php    |    50 +
+ lib/Cake/Test/Fixture/JoinABFixture.php            |    57 +
+ lib/Cake/Test/Fixture/JoinACFixture.php            |    57 +
+ lib/Cake/Test/Fixture/JoinAFixture.php             |    49 +
+ lib/Cake/Test/Fixture/JoinBFixture.php             |    48 +
+ lib/Cake/Test/Fixture/JoinCFixture.php             |    48 +
+ lib/Cake/Test/Fixture/JoinThingFixture.php         |    50 +
+ lib/Cake/Test/Fixture/MessageFixture.php           |    47 +
+ .../Test/Fixture/MyCategoriesMyProductsFixture.php |    47 +
+ .../Test/Fixture/MyCategoriesMyUsersFixture.php    |    47 +
+ lib/Cake/Test/Fixture/MyCategoryFixture.php        |    46 +
+ lib/Cake/Test/Fixture/MyProductFixture.php         |    45 +
+ lib/Cake/Test/Fixture/MyUserFixture.php            |    45 +
+ lib/Cake/Test/Fixture/NodeFixture.php              |    47 +
+ lib/Cake/Test/Fixture/NumberTreeFixture.php        |    43 +
+ lib/Cake/Test/Fixture/NumberTreeTwoFixture.php     |    43 +
+ lib/Cake/Test/Fixture/NumericArticleFixture.php    |    47 +
+ lib/Cake/Test/Fixture/OverallFavoriteFixture.php   |    47 +
+ lib/Cake/Test/Fixture/PersonFixture.php            |    56 +
+ lib/Cake/Test/Fixture/PlayerFixture.php            |    49 +
+ lib/Cake/Test/Fixture/PortfolioFixture.php         |    47 +
+ lib/Cake/Test/Fixture/PostFixture.php              |    51 +
+ lib/Cake/Test/Fixture/PostsTagFixture.php          |    48 +
+ lib/Cake/Test/Fixture/PrefixTestFixture.php        |    32 +
+ lib/Cake/Test/Fixture/PrimaryModelFixture.php      |    44 +
+ lib/Cake/Test/Fixture/ProductFixture.php           |    53 +
+ lib/Cake/Test/Fixture/ProductUpdateAllFixture.php  |    62 +
+ lib/Cake/Test/Fixture/ProjectFixture.php           |    46 +
+ lib/Cake/Test/Fixture/SampleFixture.php            |    48 +
+ lib/Cake/Test/Fixture/SecondaryModelFixture.php    |    44 +
+ lib/Cake/Test/Fixture/SessionFixture.php           |    43 +
+ lib/Cake/Test/Fixture/SiteFixture.php              |    48 +
+ lib/Cake/Test/Fixture/SomethingElseFixture.php     |    50 +
+ lib/Cake/Test/Fixture/SomethingFixture.php         |    50 +
+ lib/Cake/Test/Fixture/StoriesTagFixture.php        |    45 +
+ lib/Cake/Test/Fixture/StoryFixture.php             |    45 +
+ lib/Cake/Test/Fixture/SyfileFixture.php            |    51 +
+ lib/Cake/Test/Fixture/TagFixture.php               |    48 +
+ lib/Cake/Test/Fixture/TestPluginArticleFixture.php |    51 +
+ lib/Cake/Test/Fixture/TestPluginCommentFixture.php |    54 +
+ lib/Cake/Test/Fixture/ThePaperMonkiesFixture.php   |    42 +
+ lib/Cake/Test/Fixture/ThreadFixture.php            |    47 +
+ lib/Cake/Test/Fixture/TranslateArticleFixture.php  |    72 +
+ lib/Cake/Test/Fixture/TranslateFixture.php         |    72 +
+ lib/Cake/Test/Fixture/TranslateTableFixture.php    |    55 +
+ .../Test/Fixture/TranslateWithPrefixFixture.php    |    73 +
+ lib/Cake/Test/Fixture/TranslatedArticleFixture.php |    49 +
+ lib/Cake/Test/Fixture/TranslatedItemFixture.php    |    47 +
+ .../Test/Fixture/UnconventionalTreeFixture.php     |    41 +
+ lib/Cake/Test/Fixture/UnderscoreFieldFixture.php   |    51 +
+ lib/Cake/Test/Fixture/UnsignedFixture.php          |    61 +
+ lib/Cake/Test/Fixture/UserFixture.php              |    50 +
+ lib/Cake/Test/Fixture/UuidFixture.php              |    50 +
+ lib/Cake/Test/Fixture/UuidTagFixture.php           |    45 +
+ lib/Cake/Test/Fixture/UuidTreeFixture.php          |    39 +
+ lib/Cake/Test/Fixture/UuiditemFixture.php          |    50 +
+ .../Test/Fixture/UuiditemsUuidportfolioFixture.php |    48 +
+ .../UuiditemsUuidportfolioNumericidFixture.php     |    48 +
+ lib/Cake/Test/Fixture/UuidportfolioFixture.php     |    45 +
+ lib/Cake/Test/Fixture/rss.xml                      |    33 +
+ lib/Cake/Test/Fixture/sample.xml                   |     9 +
+ lib/Cake/Test/Fixture/soap_request.xml             |    12 +
+ lib/Cake/Test/Fixture/soap_response.xml            |    12 +
+ .../Controller/ActionsUsingSessions.ctp            |    91 +
+ .../Controller/ActionsWithNoSessions.ctp           |    84 +
+ .../Test/bake_compare/Controller/NoActions.ctp     |    27 +
+ .../Controller/NoHelpersOrComponents.ctp           |    18 +
+ lib/Cake/Test/bake_compare/Controller/Scaffold.ctp |    16 +
+ lib/Cake/Test/bake_compare/View/index.ctp          |    58 +
+ lib/Cake/Test/test_app/Config/acl.ini              |    57 +
+ lib/Cake/Test/test_app/Config/acl.ini.php          |    57 +
+ lib/Cake/Test/test_app/Config/acl.php              |    70 +
+ lib/Cake/Test/test_app/Config/empty.ini            |     1 +
+ lib/Cake/Test/test_app/Config/empty.php            |     2 +
+ .../Test/test_app/Config/htmlhelper_minimized.ini  |     2 +
+ lib/Cake/Test/test_app/Config/htmlhelper_tags.php  |     9 +
+ lib/Cake/Test/test_app/Config/nested.ini           |    17 +
+ lib/Cake/Test/test_app/Config/no_ini_extension     |     3 +
+ lib/Cake/Test/test_app/Config/no_php_extension     |     9 +
+ lib/Cake/Test/test_app/Config/no_section.ini       |     2 +
+ lib/Cake/Test/test_app/Config/routes.php           |    22 +
+ lib/Cake/Test/test_app/Config/var_test.php         |    12 +
+ lib/Cake/Test/test_app/Config/var_test2.php        |    13 +
+ .../Test/test_app/Console/Command/SampleShell.php  |    34 +
+ lib/Cake/Test/test_app/Console/Command/Task/empty  |     0
+ .../Console/Templates/test/classes/test_object.ctp |     2 +
+ .../Console/Templates/test/views/admin_edit.ctp    |     1 +
+ .../Test/test_app/Controller/AppController.php     |    35 +
+ lib/Cake/Test/test_app/Controller/Component/empty  |     0
+ .../Test/test_app/Controller/PagesController.php   |    89 +
+ .../Controller/TestAppsErrorController.php         |    14 +
+ .../test_app/Controller/TestConfigsController.php  |    13 +
+ .../test_app/Controller/TestsAppsController.php    |    55 +
+ .../Controller/TestsAppsPostsController.php        |    89 +
+ .../test_app/Error/TestAppsExceptionRenderer.php   |    21 +
+ .../Lib/Cache/Engine/TestAppCacheEngine.php        |    49 +
+ lib/Cake/Test/test_app/Lib/Library.php             |    25 +
+ .../Test/test_app/Lib/Log/Engine/TestAppLog.php    |    31 +
+ .../Test/test_app/Lib/Utility/TestUtilityClass.php |    25 +
+ .../Locale/cache_test_po/LC_MESSAGES/default.po    |     5 +
+ .../Locale/cache_test_po/LC_MESSAGES/dom1.po       |     8 +
+ .../Locale/cache_test_po/LC_MESSAGES/dom2.po       |     8 +
+ .../Locale/eng/LC_MESSAGES/validation_messages.po  |     5 +
+ lib/Cake/Test/test_app/Locale/ja_jp/LC_TIME        |    48 +
+ .../test_app/Locale/nld/LC_MESSAGES/default.po     |    29 +
+ lib/Cake/Test/test_app/Locale/nld/LC_TIME          |   169 +
+ .../Test/test_app/Locale/po/LC_MESSAGES/default.po |    76 +
+ .../test_app/Locale/po/LC_MESSAGES/test_plugin.po  |    21 +
+ .../Test/test_app/Locale/po/LC_MONETARY/default.po |    18 +
+ lib/Cake/Test/test_app/Locale/po/LC_TIME           |    60 +
+ .../test_app/Locale/rule_0_po/LC_MESSAGES/core.po  |    21 +
+ .../Locale/rule_0_po/LC_MESSAGES/default.po        |    24 +
+ .../test_app/Locale/rule_10_po/LC_MESSAGES/core.po |    24 +
+ .../Locale/rule_10_po/LC_MESSAGES/default.po       |    27 +
+ .../test_app/Locale/rule_11_po/LC_MESSAGES/core.po |    25 +
+ .../Locale/rule_11_po/LC_MESSAGES/default.po       |    25 +
+ .../test_app/Locale/rule_12_po/LC_MESSAGES/core.po |    24 +
+ .../Locale/rule_12_po/LC_MESSAGES/default.po       |    24 +
+ .../test_app/Locale/rule_13_po/LC_MESSAGES/core.po |    26 +
+ .../Locale/rule_13_po/LC_MESSAGES/default.po       |    24 +
+ .../test_app/Locale/rule_14_po/LC_MESSAGES/core.po |    23 +
+ .../Locale/rule_14_po/LC_MESSAGES/default.po       |    23 +
+ .../test_app/Locale/rule_15_po/LC_MESSAGES/core.po |    25 +
+ .../Locale/rule_15_po/LC_MESSAGES/default.po       |    25 +
+ .../test_app/Locale/rule_1_po/LC_MESSAGES/core.po  |    22 +
+ .../Locale/rule_1_po/LC_MESSAGES/default.po        |    30 +
+ .../test_app/Locale/rule_2_po/LC_MESSAGES/core.po  |    22 +
+ .../Locale/rule_2_po/LC_MESSAGES/default.po        |    25 +
+ .../test_app/Locale/rule_3_po/LC_MESSAGES/core.po  |    23 +
+ .../Locale/rule_3_po/LC_MESSAGES/default.po        |    26 +
+ .../test_app/Locale/rule_4_po/LC_MESSAGES/core.po  |    23 +
+ .../Locale/rule_4_po/LC_MESSAGES/default.po        |    26 +
+ .../test_app/Locale/rule_5_po/LC_MESSAGES/core.po  |    23 +
+ .../Locale/rule_5_po/LC_MESSAGES/default.po        |    24 +
+ .../test_app/Locale/rule_6_po/LC_MESSAGES/core.po  |    23 +
+ .../Locale/rule_6_po/LC_MESSAGES/default.po        |    26 +
+ .../test_app/Locale/rule_7_po/LC_MESSAGES/core.po  |    23 +
+ .../Locale/rule_7_po/LC_MESSAGES/default.po        |    26 +
+ .../test_app/Locale/rule_8_po/LC_MESSAGES/core.po  |    23 +
+ .../Locale/rule_8_po/LC_MESSAGES/default.po        |    26 +
+ .../test_app/Locale/rule_9_po/LC_MESSAGES/core.po  |    23 +
+ .../Locale/rule_9_po/LC_MESSAGES/default.po        |    26 +
+ lib/Cake/Test/test_app/Locale/time_test/LC_TIME    |    42 +
+ lib/Cake/Test/test_app/Model/AppModel.php          |    34 +
+ .../Behavior/PersisterOneBehaviorBehavior.php      |    28 +
+ .../Behavior/PersisterTwoBehaviorBehavior.php      |    28 +
+ lib/Cake/Test/test_app/Model/Comment.php           |    33 +
+ .../Model/Datasource/Database/TestLocalDriver.php  |     6 +
+ .../Model/Datasource/Session/TestAppLibSession.php |    30 +
+ .../test_app/Model/Datasource/Test2OtherSource.php |    27 +
+ .../Test/test_app/Model/Datasource/Test2Source.php |    27 +
+ lib/Cake/Test/test_app/Model/Extract.php           |    45 +
+ lib/Cake/Test/test_app/Model/PersisterOne.php      |    61 +
+ lib/Cake/Test/test_app/Model/PersisterTwo.php      |    32 +
+ lib/Cake/Test/test_app/Model/Post.php              |    28 +
+ .../test_app/Plugin/PluginJs/Config/bootstrap.php  |     2 +
+ .../Plugin/PluginJs/webroot/js/one/plugin_one.js   |     1 +
+ .../Plugin/PluginJs/webroot/js/plugin_js.js        |     1 +
+ .../Plugin/TestPlugin/Config/Schema/schema.php     |    40 +
+ .../test_app/Plugin/TestPlugin/Config/acl.ini.php  |    57 +
+ .../Plugin/TestPlugin/Config/bootstrap.php         |     2 +
+ .../Plugin/TestPlugin/Config/custom_config.php     |     2 +
+ .../test_app/Plugin/TestPlugin/Config/load.php     |    19 +
+ .../Plugin/TestPlugin/Config/more.load.php         |    19 +
+ .../test_app/Plugin/TestPlugin/Config/nested.ini   |     4 +
+ .../test_app/Plugin/TestPlugin/Config/routes.php   |     2 +
+ .../TestPlugin/Console/Command/ExampleShell.php    |    33 +
+ .../Console/Command/Task/OtherTaskTask.php         |    26 +
+ .../TestPlugin/Console/Command/TestPluginShell.php |    31 +
+ .../Plugin/TestPlugin/Console/Templates/empty      |     0
+ .../Controller/Component/OtherComponent.php        |    25 +
+ .../Controller/Component/PluginsComponent.php      |    28 +
+ .../Controller/Component/TestPluginComponent.php   |    28 +
+ .../Component/TestPluginOtherComponent.php         |    25 +
+ .../Controller/TestPluginAppController.php         |    27 +
+ .../TestPlugin/Controller/TestPluginController.php |    36 +
+ .../TestPlugin/Controller/TestsController.php      |    40 +
+ .../Lib/Cache/Engine/TestPluginCacheEngine.php     |    46 +
+ .../Lib/Custom/Package/CustomLibClass.php          |    25 +
+ .../Lib/Error/TestPluginExceptionRenderer.php      |    39 +
+ .../TestPlugin/Lib/Log/Engine/TestPluginLog.php    |    31 +
+ .../Lib/Routing/Filter/Test2DispatcherFilter.php   |    36 +
+ .../Lib/Routing/Filter/TestDispatcherFilter.php    |    34 +
+ .../TestPlugin/Lib/Routing/Route/TestRoute.php     |     7 +
+ .../Plugin/TestPlugin/Lib/TestPluginLibrary.php    |    25 +
+ .../TestPlugin/Lib/TestPluginOtherLibrary.php      |    25 +
+ .../Locale/po/LC_MESSAGES/test_plugin.po           |    50 +
+ .../Locale/po/LC_MONETARY/test_plugin.po           |    22 +
+ .../Behavior/TestPluginPersisterOneBehavior.php    |    28 +
+ .../Behavior/TestPluginPersisterTwoBehavior.php    |    28 +
+ .../Model/Datasource/Database/DboDummy.php         |    11 +
+ .../Model/Datasource/Database/TestDriver.php       |     3 +
+ .../Model/Datasource/Session/TestPluginSession.php |    29 +
+ .../Model/Datasource/TestOtherSource.php           |    27 +
+ .../TestPlugin/Model/Datasource/TestSource.php     |    30 +
+ .../Plugin/TestPlugin/Model/TestPluginAppModel.php |    25 +
+ .../Plugin/TestPlugin/Model/TestPluginAuthUser.php |    46 +
+ .../Plugin/TestPlugin/Model/TestPluginAuthors.php  |    39 +
+ .../Plugin/TestPlugin/Model/TestPluginComment.php  |    30 +
+ .../Plugin/TestPlugin/Model/TestPluginPost.php     |    74 +
+ .../Plugin/TestPlugin/Utility/TestPluginEngine.php |     5 +
+ .../TestPlugin/Vendor/Example/ExampleExample.php   |     4 +
+ .../TestPlugin/Vendor/sample/sample_plugin.php     |    25 +
+ .../test_app/Plugin/TestPlugin/Vendor/welcome.php  |    19 +
+ .../TestPlugin/View/Elements/plugin_element.ctp    |     1 +
+ .../View/Elements/sub_dir/sub_element.ctp          |     1 +
+ .../View/Elements/test_plugin_element.ctp          |     1 +
+ .../Plugin/TestPlugin/View/Elements/translate.ctp  |     1 +
+ .../View/Emails/text/test_plugin_tpl.ctp           |     1 +
+ .../Plugin/TestPlugin/View/Errors/error500.ctp     |    11 +
+ .../TestPlugin/View/Helper/OtherHelperHelper.php   |    27 +
+ .../TestPlugin/View/Helper/PluggedHelperHelper.php |    27 +
+ .../TestPlugin/View/Helper/TestPluginAppHelper.php |     4 +
+ .../View/Layouts/Emails/text/plug_default.ctp      |     4 +
+ .../Plugin/TestPlugin/View/Layouts/default.ctp     |     1 +
+ .../Plugin/TestPlugin/View/Tests/index.ctp         |     1 +
+ .../Plugin/TestPlugin/View/Tests/scaffold.form.ctp |     1 +
+ .../TestPlugin/webroot/css/test_plugin_asset.css   |     1 +
+ .../Plugin/TestPlugin/webroot/css/theme_one.htc    |     1 +
+ .../TestPlugin/webroot/css/unknown.extension       |     1 +
+ .../TestPlugin/webroot/flash/plugin_test.swf       |     1 +
+ .../Plugin/TestPlugin/webroot/img/cake.icon.gif    |   Bin 0 -> 233 bytes
+ .../TestPlugin/webroot/js/test_plugin/test.js      |     1 +
+ .../Plugin/TestPlugin/webroot/pdfs/plugin_test.pdf |   Bin 0 -> 53 bytes
+ .../test_app/Plugin/TestPlugin/webroot/root.js     |     1 +
+ .../Plugin/TestPluginTwo/Config/bootstrap.php      |     2 +
+ .../TestPluginTwo/Console/Command/ExampleShell.php |    34 +
+ .../TestPluginTwo/Console/Command/Task/empty       |     0
+ .../TestPluginTwo/Console/Command/WelcomeShell.php |    34 +
+ .../Plugin/TestPluginTwo/Console/Templates/empty   |     0
+ .../View/Layouts/Emails/text/default.ctp           |     4 +
+ lib/Cake/Test/test_app/Utility/TestAppEngine.php   |     5 +
+ lib/Cake/Test/test_app/Vendor/Test/MyTest.php      |    19 +
+ lib/Cake/Test/test_app/Vendor/Test/hello.php       |    19 +
+ lib/Cake/Test/test_app/Vendor/css/test_asset.css   |     1 +
+ lib/Cake/Test/test_app/Vendor/img/test.jpg         |   Bin 0 -> 5308 bytes
+ lib/Cake/Test/test_app/Vendor/img/test_2.JPG       |   Bin 0 -> 5308 bytes
+ .../Vendor/sample/configure_test_vendor_sample.php |    25 +
+ .../Test/test_app/Vendor/somename/some.name.php    |    19 +
+ lib/Cake/Test/test_app/Vendor/welcome.php          |    19 +
+ .../Test/test_app/View/Elements/Flash/default.ctp  |     1 +
+ .../test_app/View/Elements/extended_element.ctp    |     2 +
+ .../View/Elements/extended_missing_element.ctp     |     2 +
+ .../Test/test_app/View/Elements/flash_classy.ctp   |     1 +
+ .../Test/test_app/View/Elements/flash_helper.ctp   |     5 +
+ lib/Cake/Test/test_app/View/Elements/html_call.ctp |     3 +
+ .../View/Elements/nocache/contains_nocache.ctp     |     5 +
+ .../Test/test_app/View/Elements/nocache/plain.ctp  |     4 +
+ .../Test/test_app/View/Elements/nocache/sub1.ctp   |     8 +
+ .../Test/test_app/View/Elements/nocache/sub2.ctp   |     6 +
+ .../Test/test_app/View/Elements/parent_element.ctp |     2 +
+ .../Test/test_app/View/Elements/session_helper.ctp |     5 +
+ .../Test/test_app/View/Elements/test_element.ctp   |     1 +
+ .../Test/test_app/View/Elements/test_element.xml   |     1 +
+ .../Test/test_app/View/Elements/type_check.ctp     |     1 +
+ lib/Cake/Test/test_app/View/Emails/html/custom.ctp |     1 +
+ .../Test/test_app/View/Emails/html/default.ctp     |     7 +
+ lib/Cake/Test/test_app/View/Emails/html/html.ctp   |    12 +
+ lib/Cake/Test/test_app/View/Emails/html/image.ctp  |     8 +
+ .../Test/test_app/View/Emails/html/japanese.ctp    |     1 +
+ .../Test/test_app/View/Emails/html/long_line.ctp   |    14 +
+ .../test_app/View/Emails/html/nested_element.ctp   |     3 +
+ lib/Cake/Test/test_app/View/Emails/text/custom.ctp |     1 +
+ .../test_app/View/Emails/text/custom_helper.ctp    |     1 +
+ .../Test/test_app/View/Emails/text/default.ctp     |     1 +
+ .../Test/test_app/View/Emails/text/japanese.ctp    |     1 +
+ lib/Cake/Test/test_app/View/Emails/text/wide.ctp   |     2 +
+ lib/Cake/Test/test_app/View/Errors/error400.ctp    |    13 +
+ lib/Cake/Test/test_app/View/Errors/error500.ctp    |    10 +
+ .../Test/test_app/View/Helper/BananaHelper.php     |    11 +
+ .../test_app/View/Layouts/Emails/html/default.ctp  |    13 +
+ .../test_app/View/Layouts/Emails/html/japanese.ctp |    13 +
+ .../test_app/View/Layouts/Emails/html/thin.ctp     |    13 +
+ .../test_app/View/Layouts/Emails/text/default.ctp  |     4 +
+ .../test_app/View/Layouts/Emails/text/japanese.ctp |     4 +
+ lib/Cake/Test/test_app/View/Layouts/ajax.ctp       |     1 +
+ lib/Cake/Test/test_app/View/Layouts/ajax2.ctp      |     2 +
+ lib/Cake/Test/test_app/View/Layouts/banana.ctp     |     5 +
+ .../test_app/View/Layouts/cache_empty_sections.ctp |    13 +
+ .../Test/test_app/View/Layouts/cache_layout.ctp    |    13 +
+ lib/Cake/Test/test_app/View/Layouts/default.ctp    |    43 +
+ lib/Cake/Test/test_app/View/Layouts/flash.ctp      |    19 +
+ lib/Cake/Test/test_app/View/Layouts/js/default.ctp |     2 +
+ .../Test/test_app/View/Layouts/json/default.ctp    |     1 +
+ .../Test/test_app/View/Layouts/multi_cache.ctp     |    21 +
+ .../Test/test_app/View/Layouts/rss/default.ctp     |    17 +
+ .../Test/test_app/View/Layouts/xml/default.ctp     |     2 +
+ lib/Cake/Test/test_app/View/Pages/extract.ctp      |    41 +
+ lib/Cake/Test/test_app/View/Pages/home.ctp         |    72 +
+ lib/Cake/Test/test_app/View/Pages/page.home.ctp    |     2 +
+ lib/Cake/Test/test_app/View/Posts/alt_ext.alt      |     1 +
+ .../test_app/View/Posts/cache_empty_sections.ctp   |     2 +
+ lib/Cake/Test/test_app/View/Posts/cache_form.ctp   |    14 +
+ .../Test/test_app/View/Posts/extend_element.ctp    |     3 +
+ lib/Cake/Test/test_app/View/Posts/extend_loop.ctp  |     2 +
+ .../Test/test_app/View/Posts/extend_loop_inner.ctp |     2 +
+ .../test_app/View/Posts/extend_missing_element.ctp |     1 +
+ lib/Cake/Test/test_app/View/Posts/extend_self.ctp  |     2 +
+ .../test_app/View/Posts/extend_with_element.ctp    |     3 +
+ .../Test/test_app/View/Posts/helper_overwrite.ctp  |     4 +
+ lib/Cake/Test/test_app/View/Posts/index.ctp        |     1 +
+ lib/Cake/Test/test_app/View/Posts/json/index.ctp   |    14 +
+ .../Test/test_app/View/Posts/multiple_nocache.ctp  |    15 +
+ .../Test/test_app/View/Posts/nested_extends.ctp    |     5 +
+ .../View/Posts/nocache_multiple_element.ctp        |     9 +
+ lib/Cake/Test/test_app/View/Posts/open_block.ctp   |     3 +
+ lib/Cake/Test/test_app/View/Posts/parent_1.ctp     |     5 +
+ lib/Cake/Test/test_app/View/Posts/parent_2.ctp     |     3 +
+ lib/Cake/Test/test_app/View/Posts/parent_view.ctp  |     2 +
+ .../Test/test_app/View/Posts/scaffold.form.ctp     |     1 +
+ .../test_app/View/Posts/sequencial_nocache.ctp     |     5 +
+ .../Test/test_app/View/Posts/test_nocache_tags.ctp |   124 +
+ lib/Cake/Test/test_app/View/Posts/xml/index.ctp    |     6 +
+ lib/Cake/Test/test_app/View/Scaffolds/empty        |     0
+ lib/Cake/Test/test_app/View/TestsApps/index.ctp    |     1 +
+ .../Test/test_app/View/TestsApps/json/index.ctp    |     1 +
+ .../Themed/TestTheme/Elements/test_element.ctp     |     1 +
+ .../View/Themed/TestTheme/Emails/text/themed.ctp   |     2 +
+ .../View/Themed/TestTheme/Layouts/default.ctp      |     2 +
+ .../TestPlugin/Emails/text/test_plugin_tpl.ctp     |     1 +
+ .../Plugin/TestPlugin/Layouts/plugin_default.ctp   |     1 +
+ .../TestTheme/Plugin/TestPlugin/Tests/index.ctp    |     1 +
+ .../test_app/View/Themed/TestTheme/Posts/index.ctp |     1 +
+ .../View/Themed/TestTheme/Posts/scaffold.index.ctp |     1 +
+ .../View/Themed/TestTheme/Posts/themed.ctp         |     4 +
+ .../Themed/TestTheme/webroot/css/test_asset.css    |     1 +
+ .../Themed/TestTheme/webroot/css/theme_webroot.css |     1 +
+ .../Themed/TestTheme/webroot/flash/theme_test.swf  |     1 +
+ .../Themed/TestTheme/webroot/img/cake.power.gif    |   Bin 0 -> 201 bytes
+ .../View/Themed/TestTheme/webroot/img/test.jpg     |   Bin 0 -> 5308 bytes
+ .../Themed/TestTheme/webroot/js/one/theme_one.js   |     1 +
+ .../View/Themed/TestTheme/webroot/js/theme.js      |     1 +
+ .../Themed/TestTheme/webroot/pdfs/theme_test.pdf   |   Bin 0 -> 52 bytes
+ .../View/Themed/TestTheme/webroot/space image.text |     1 +
+ lib/Cake/Test/test_app/tmp/empty                   |     0
+ lib/Cake/Test/test_app/webroot/img/cake.power.gif  |   Bin 0 -> 201 bytes
+ .../webroot/theme/test_theme/css/theme_webroot.css |     1 +
+ .../webroot/theme/test_theme/css/webroot_test.css  |     1 +
+ .../webroot/theme/test_theme/img/cake.power.gif    |   Bin 0 -> 201 bytes
+ .../test_app/webroot/theme/test_theme/img/test.jpg |   Bin 0 -> 5308 bytes
+ lib/Cake/TestSuite/CakeTestCase.php                |   748 ++
+ lib/Cake/TestSuite/CakeTestLoader.php              |   125 +
+ lib/Cake/TestSuite/CakeTestRunner.php              |   109 +
+ lib/Cake/TestSuite/CakeTestSuite.php               |    62 +
+ lib/Cake/TestSuite/CakeTestSuiteCommand.php        |   157 +
+ lib/Cake/TestSuite/CakeTestSuiteDispatcher.php     |   293 +
+ lib/Cake/TestSuite/ControllerTestCase.php          |   386 +
+ lib/Cake/TestSuite/Coverage/BaseCoverageReport.php |   182 +
+ lib/Cake/TestSuite/Coverage/HtmlCoverageReport.php |   229 +
+ lib/Cake/TestSuite/Coverage/TextCoverageReport.php |    64 +
+ lib/Cake/TestSuite/Fixture/CakeFixtureManager.php  |   306 +
+ lib/Cake/TestSuite/Fixture/CakeTestFixture.php     |   336 +
+ lib/Cake/TestSuite/Fixture/CakeTestModel.php       |    58 +
+ lib/Cake/TestSuite/Reporter/CakeBaseReporter.php   |   237 +
+ lib/Cake/TestSuite/Reporter/CakeHtmlReporter.php   |   416 +
+ lib/Cake/TestSuite/Reporter/CakeTextReporter.php   |   183 +
+ lib/Cake/TestSuite/templates/footer.php            |    35 +
+ lib/Cake/TestSuite/templates/header.php            |   145 +
+ lib/Cake/TestSuite/templates/menu.php              |    51 +
+ .../TestSuite/templates/missing_connection.php     |    26 +
+ lib/Cake/TestSuite/templates/phpunit.php           |    29 +
+ lib/Cake/TestSuite/templates/xdebug.php            |    26 +
+ lib/Cake/Utility/CakeNumber.php                    |   416 +
+ lib/Cake/Utility/CakeText.php                      |   710 ++
+ lib/Cake/Utility/CakeTime.php                      |  1150 ++
+ lib/Cake/Utility/ClassRegistry.php                 |   365 +
+ lib/Cake/Utility/Debugger.php                      |   854 ++
+ lib/Cake/Utility/File.php                          |   618 ++
+ lib/Cake/Utility/Folder.php                        |   868 ++
+ lib/Cake/Utility/Hash.php                          |  1102 ++
+ lib/Cake/Utility/Inflector.php                     |   585 ++
+ lib/Cake/Utility/ObjectCollection.php              |   343 +
+ lib/Cake/Utility/Sanitize.php                      |   269 +
+ lib/Cake/Utility/Security.php                      |   384 +
+ lib/Cake/Utility/Set.php                           |  1112 ++
+ lib/Cake/Utility/String.php                        |    27 +
+ lib/Cake/Utility/Validation.php                    |  1075 ++
+ lib/Cake/Utility/Xml.php                           |   397 +
+ lib/Cake/VERSION.txt                               |    20 +
+ lib/Cake/View/Elements/Flash/default.ctp           |     7 +
+ lib/Cake/View/Elements/Flash/error.ctp             |     1 +
+ lib/Cake/View/Elements/Flash/success.ctp           |     1 +
+ lib/Cake/View/Elements/exception_stack_trace.ctp   |    76 +
+ lib/Cake/View/Elements/sql_dump.ctp                |    82 +
+ lib/Cake/View/Errors/fatal_error.ctp               |    39 +
+ lib/Cake/View/Errors/missing_action.ctp            |    41 +
+ lib/Cake/View/Errors/missing_behavior.ctp          |    39 +
+ lib/Cake/View/Errors/missing_component.ctp         |    39 +
+ lib/Cake/View/Errors/missing_connection.ctp        |    40 +
+ lib/Cake/View/Errors/missing_controller.ctp        |    39 +
+ lib/Cake/View/Errors/missing_database.ctp          |    31 +
+ lib/Cake/View/Errors/missing_datasource.ctp        |    32 +
+ lib/Cake/View/Errors/missing_datasource_config.ctp |    27 +
+ lib/Cake/View/Errors/missing_helper.ctp            |    39 +
+ lib/Cake/View/Errors/missing_layout.ctp            |    44 +
+ lib/Cake/View/Errors/missing_plugin.ctp            |    43 +
+ lib/Cake/View/Errors/missing_table.ctp             |    27 +
+ lib/Cake/View/Errors/missing_view.ctp              |    44 +
+ lib/Cake/View/Errors/pdo_error.ctp                 |    36 +
+ lib/Cake/View/Errors/private_action.ctp            |    27 +
+ lib/Cake/View/Errors/scaffold_error.ctp            |    38 +
+ lib/Cake/View/Helper.php                           |   987 ++
+ lib/Cake/View/Helper/CacheHelper.php               |   341 +
+ lib/Cake/View/Helper/FlashHelper.php               |    91 +
+ lib/Cake/View/Helper/FormHelper.php                |  3074 ++++++
+ lib/Cake/View/Helper/HtmlHelper.php                |  1271 +++
+ lib/Cake/View/Helper/JqueryEngineHelper.php        |   360 +
+ lib/Cake/View/Helper/JsBaseEngineHelper.php        |   592 ++
+ lib/Cake/View/Helper/JsHelper.php                  |   436 +
+ lib/Cake/View/Helper/MootoolsEngineHelper.php      |   376 +
+ lib/Cake/View/Helper/NumberHelper.php              |   185 +
+ lib/Cake/View/Helper/PaginatorHelper.php           |  1014 ++
+ lib/Cake/View/Helper/PrototypeEngineHelper.php     |   369 +
+ lib/Cake/View/Helper/RssHelper.php                 |   355 +
+ lib/Cake/View/Helper/SessionHelper.php             |   175 +
+ lib/Cake/View/Helper/TextHelper.php                |   345 +
+ lib/Cake/View/Helper/TimeHelper.php                |   500 +
+ lib/Cake/View/HelperCollection.php                 |   203 +
+ lib/Cake/View/JsonView.php                         |   175 +
+ lib/Cake/View/MediaView.php                        |   103 +
+ lib/Cake/View/ScaffoldView.php                     |    91 +
+ lib/Cake/View/Scaffolds/form.ctp                   |    55 +
+ lib/Cake/View/Scaffolds/index.ctp                  |   102 +
+ lib/Cake/View/Scaffolds/view.ctp                   |   194 +
+ lib/Cake/View/ThemeView.php                        |    31 +
+ lib/Cake/View/View.php                             |  1241 +++
+ lib/Cake/View/ViewBlock.php                        |   236 +
+ lib/Cake/View/XmlView.php                          |   148 +
+ lib/Cake/basics.php                                |  1085 ++
+ lib/Cake/bootstrap.php                             |   441 +
+ 1016 files changed, 273493 insertions(+)

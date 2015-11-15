@@ -15,7 +15,6 @@ class ArenasController extends AppController {
 
     public function beforefilter() {
         parent::beforeFilter();
-//        $this->Auth->allow(); // Allow all actions
         $this->Auth->allow('index');
     }
 
@@ -30,17 +29,15 @@ class ArenasController extends AppController {
      * Fighter page
      */
     public function fighter() {
-        pr($this->request->data);
-
         // Find logged player's fighter
-        $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user()['id']);
+        $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user());
 
         if ($this->request->is('post')) {
             // Create
             if (isset($this->request->data['Fighter']['name'])) {
-                $this->Fighter->doCreate($this->Auth->user()['id'],
+                $this->Fighter->doCreate($this->Auth->user(),
                         $this->request->data['Fighter']['name']);
-                $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user()['id']);
+                $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user());
             }
             // Upload avatar
             else if (isset($this->request->data['Fighteruploadavatar']['file'])) {
@@ -74,10 +71,8 @@ class ArenasController extends AppController {
      * Sight page
      */
     public function sight() {
-        pr($this->request->data);
-
         // Get player's fighter
-        $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user()['id']);
+        $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user());
 
         if (!empty($playerFighter)) {
             if ($this->request->is('post')) {
@@ -102,7 +97,7 @@ class ArenasController extends AppController {
             }
 
             // Update of player's fighter
-            $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user()['id']);
+            $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user());
 
             // Map of the arena
             $map = array();
@@ -163,7 +158,7 @@ class ArenasController extends AppController {
      */
     public function diary() {
         // Get player's fighter
-        $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user()['id']);
+        $playerFighter = $this->Fighter->findByPlayerId($this->Auth->user());
 
         if (!empty($playerFighter)) {
             // Get events within 24h

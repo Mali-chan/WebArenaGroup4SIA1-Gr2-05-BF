@@ -15,14 +15,8 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-/**
-$Home = __d('cake_dev', 'Home');
-$Index = __d('cake_dev', 'Index');
-$Fighter = __d('cake_dev', 'Fighter');
-$Sight = __d('cake_dev', 'Sight');
+$cakeDescription = __d('cake_dev', 'WebArena');
 $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
-*/
-
 ?>
         
 <!DOCTYPE html>
@@ -30,58 +24,68 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
     <head>
     <?php echo $this->Html->charset(); ?>
         <title>
-        <?php echo $Home ?>:
-        <?php echo $this->fetch('Home'); ?>
+        <?php echo $cakeDescription ?>:
+        <?php echo $this->fetch('title'); ?>
         </title>
+    
+    <?php
+        echo $this->Html->css('bootstrap.min');
+        echo $this->Html->css('bootstrap-theme.min');
+        echo $this->Html->css('webarena');
+        
+        echo $this->Html->script('jquery-1.11.3.min');        
+        echo $this->Html->script('bootstrap.min');
+    ?>
+        
     <?php
         echo $this->Html->meta('icon');
-        echo $this->Html->css('cake.generic');
         echo $this->fetch('meta');
         echo $this->fetch('css');
         echo $this->fetch('script');
-        echo $scripts_for_layout;
     ?>
     </head>
     <body>
         <div id="container">
             <div id="header">
-                <nav>
-                    <ul>                      
-                        <h1>
-                            <?php echo $this->Html->link('Home', array('controller' => 'arenas', 'action' => 'index')); ?> 
-                            <?php echo $this->Html->link('Fighter', array('controller' => 'arenas', 'action' => 'fighter')); ?> 
-                            <?php echo $this->Html->link('Sight', array('controller' => 'arenas', 'action' => 'sight')); ?> 
-                            <?php echo $this->Html->link('Diary', array('controller' => 'arenas', 'action' => 'diary')); ?>
-                            <?php 
-                                if (empty($authUser)) {
-                                    echo $this->Html->link('Login', array('controller' => 'users', 'action' => 'login'));
-                                } else {
-                                    echo $this->Html->link('Logout', array('controller' => 'users', 'action' => 'logout'));
-                                }
-                            ?>
-                        </h1>
-                    </ul>
+                <nav class="navbar navbar-inverse">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                             <?php echo $this->Html->link('WebArena', DS, array('class' => 'navbar-brand')); ?>
+                        </div>
+                        <div>
+                            <ul class="nav navbar-nav">
+                                <li><?php echo $this->Html->link('Home', DS); ?></li>
+                                <li><?php echo $this->Html->link('Fighter', array('controller' => 'arenas', 'action' => 'fighter')); ?></li> 
+                                <li><?php echo $this->Html->link('Sight', array('controller' => 'arenas', 'action' => 'sight')); ?></li>
+                                <li><?php echo $this->Html->link('Diary', array('controller' => 'arenas', 'action' => 'diary')); ?></li>
+                                <li><?php 
+                                        if (empty($authUser)) {
+                                            echo $this->Html->link('Login', array('controller' => 'users', 'action' => 'login'));
+                                        } else {
+                                            echo $this->Html->link('Logout', array('controller' => 'users', 'action' => 'logout'));
+                                        }
+                                    ?>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </nav>
             </div>
 
-            <div id="content">
-            <?php echo $this->Session->flash(); ?>
-            <?php echo $this->Session->flash('auth'); ?>
-            <?php echo $this->fetch('content'); ?>
+            <div id="content" class="container">
+                <?php echo $this->Session->flash(); ?>
+                <?php echo $this->Session->flash('auth'); ?>
+                <?php echo $this->fetch('content'); ?>
             </div>
 
             <div id="footer">
-            <?php echo $this->Html->link(
-                    $this->Html->image('cake.power.gif', array( 'border' => '0')),
-                    'http://www.cakephp.org/',
-                    array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
-                );
-            ?>
                 <p>
-                <?php echo "Team Project" ; ?>
+                    <?php echo 'WebArena - Gr2-05 - HU & MUGARUKA'; ?>
+                </p>
+                <p>
+                    <?php echo 'Option F - Bonus: ' . $this->Html->link('versions.log', DS . 'files' . DS . 'versions.log'); ?>
                 </p>
             </div>
         </div>
-    <?php echo $this->element('sql_dump'); ?>
     </body>
 </html>

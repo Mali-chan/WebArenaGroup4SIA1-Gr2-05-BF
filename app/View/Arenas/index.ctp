@@ -1,1 +1,1 @@
-<?php echo 'Welcome to WebArena!'; ?>
+<?php $this->assign('title', 'Home');?>
