@@ -1,1 +1,1 @@
-<?php echo 'Welcome to the game !!!'; ?>
+<?php echo 'Welcome to WebArena!'; ?>

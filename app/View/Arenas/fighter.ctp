@@ -1,6 +1,11 @@
-<?php
-    pr($fighter);
-    
+<table>
+    <?php
+        echo $this->Html->tableHeaders(array('Name', 'Coordinate x', 'Coordinate y', 'Level', 'Xp', 'Sight skill', 'Strength skill', 'Health skill', 'Current health'));
+        echo $this->Html->tableCells(array(array($fighter['Fighter']['name'], $fighter['Fighter']['coordinate_x'], $fighter['Fighter']['coordinate_y'], $fighter['Fighter']['level'], $fighter['Fighter']['xp'], $fighter['Fighter']['skill_sight'], $fighter['Fighter']['skill_strength'], $fighter['Fighter']['skill_health'], $fighter['Fighter']['current_health'])));
+    ?>
+</table>
+
+<?php    
     // If player's fighter is dead, suggest creating a new fighter
     if (empty($fighter)) {
         echo $this->Form->create('Fighter');
@@ -17,7 +22,7 @@
         // Suggest to upload fighter's avatar
         echo $this->Form->create('Fighteruploadavatar', array('type' => 'file'));
         echo $this->Form->file('file');
-        echo $this->Form->end('Upload');
+        echo $this->Form->end('Upload avatar');
         
         // Suggest to level up fighter's skill
         echo $this->Form->create('Fighterlevelup');

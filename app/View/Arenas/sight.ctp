@@ -1,12 +1,10 @@
 <?php
-    pr($fighters);
-
     if (!empty($playerFighter)) {
         foreach ($map as $row) {
             foreach ($row as $col) {
                 echo $this->Html->image($col);
             }
-            echo '<br>';
+            echo $this->Html->tag('br');
         }
     
         echo $this->Form->create('Fightermove');
